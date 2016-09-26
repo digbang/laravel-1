@@ -57,8 +57,7 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "api" routes for the application.
-     *
+     * Here is where you can register API routes for your application.
      * These routes are typically stateless.
      *
      * @return void
