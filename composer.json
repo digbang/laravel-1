@@ -10,7 +10,10 @@
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
         "laravel-doctrine/orm": "^1.2",
-        "laravel-doctrine/fluent": "^1.1"
+        "laravel-doctrine/fluent": "^1.1",
+        "laravel-doctrine/extensions": "^1.0",
+        "gedmo/doctrine-extensions": "^2.4",
+        "beberlei/DoctrineExtensions": "^1.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
