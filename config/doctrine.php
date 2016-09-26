@@ -23,14 +23,10 @@ return [
     'managers'                   => [
         'default' => [
             'dev'           => env('APP_DEBUG'),
-            'meta'          => env('DOCTRINE_METADATA', 'annotations'),
+            'meta'          => 'fluent',
             'connection'    => env('DB_CONNECTION', 'mysql'),
-            'namespaces'    => [
-                'App'
-            ],
-            'paths'         => [
-                base_path('app')
-            ],
+            'namespaces'    => [],
+            'paths'         => [],
             'repository'    => Doctrine\ORM\EntityRepository::class,
             'proxies'       => [
                 'namespace'     => false,
