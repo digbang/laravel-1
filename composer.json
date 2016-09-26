@@ -14,7 +14,8 @@
         "laravel-doctrine/extensions": "^1.0",
         "gedmo/doctrine-extensions": "^2.4",
         "beberlei/DoctrineExtensions": "^1.0",
-        "digbang/backoffice": "^4.2"
+        "digbang/backoffice": "^4.2",
+        "laravelba/route-binder": "^4.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
