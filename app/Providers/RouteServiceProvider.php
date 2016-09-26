@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Contracts\Routing\Registrar;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Routing\Router;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -17,29 +18,27 @@ class RouteServiceProvider extends ServiceProvider
     protected $namespace = 'App\Http\Controllers';
 
     /**
-     * Define your route model bindings, pattern filters, etc.
+     * Define the routes for the application.
      *
-     * @return void
+     * @param Registrar $router
      */
-    public function boot()
+    public function map(Registrar $router)
     {
-        //
+        $this->mapApiRoutes($router);
 
-        parent::boot();
+        $this->mapWebRoutes($router);
+
+        //
     }
 
     /**
-     * Define the routes for the application.
+     * Define your route model bindings, pattern filters, etc.
      *
-     * @return void
+     * @param Router $router
      */
-    public function map()
+    public function bind(Router $router)
     {
-        $this->mapApiRoutes();
-
-        $this->mapWebRoutes();
-
-        //
+        // $router->bind('user_id', function () { /* ... */ });
     }
 
     /**
@@ -47,9 +46,9 @@ class RouteServiceProvider extends ServiceProvider
      *
      * These routes all receive session state, CSRF protection, etc.
      *
-     * @return void
+     * @param Registrar $router
      */
-    protected function mapWebRoutes()
+    protected function mapWebRoutes(Registrar $router)
     {
         Route::middleware('web')
              ->namespace($this->namespace)
@@ -60,13 +59,23 @@ class RouteServiceProvider extends ServiceProvider
      * Here is where you can register API routes for your application.
      * These routes are typically stateless.
      *
-     * @return void
+     * @param Registrar $router
      */
-    protected function mapApiRoutes()
+    protected function mapApiRoutes(Registrar $router)
     {
         Route::prefix('api')
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+    }
+
+    /**
+     * @return void
+     */
+    public function boot()
+    {
+        $this->app->call([$this, 'bind']);
+
+        parent::boot();
     }
 }
