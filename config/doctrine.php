@@ -33,6 +33,9 @@ return [
                 'path'          => storage_path('proxies'),
                 'auto_generate' => env('DOCTRINE_PROXY_AUTOGENERATE', false)
             ],
+            'mappings' => [
+                //
+            ],
             /*
             |--------------------------------------------------------------------------
             | Doctrine events
@@ -106,7 +109,11 @@ return [
     |--------------------------------------------------------------------------
     */
     'custom_types'               => [
-        'json' => LaravelDoctrine\ORM\Types\Json::class
+        'json'                                                          => LaravelDoctrine\ORM\Types\Json::class,
+        DoctrineExtensions\Types\CarbonDateType::CARBONDATE             => DoctrineExtensions\Types\CarbonDateType::class,
+        DoctrineExtensions\Types\CarbonDateTimeType::CARBONDATETIME     => DoctrineExtensions\Types\CarbonDateTimeType::class,
+        DoctrineExtensions\Types\CarbonDateTimeTzType::CARBONDATETIMETZ => DoctrineExtensions\Types\CarbonDateTimeTzType::class,
+        DoctrineExtensions\Types\CarbonTimeType::CARBONTIME             => DoctrineExtensions\Types\CarbonTimeType::class,
     ],
     /*
     |--------------------------------------------------------------------------
