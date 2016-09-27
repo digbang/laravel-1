@@ -170,6 +170,7 @@ return [
         LaravelDoctrine\ORM\DoctrineServiceProvider::class,
         LaravelDoctrine\Extensions\GedmoExtensionsServiceProvider::class,
         LaravelDoctrine\Extensions\BeberleiExtensionsServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
         LaravelBA\RouteBinder\RouteBinderServiceProvider::class,
         Digbang\Backoffice\BackofficeServiceProvider::class,
 
@@ -228,6 +229,10 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        'Form' => Collective\Html\FormFacade::class,
+        'HTML' => Collective\Html\HtmlFacade::class,
+
         'DatabaseSeeder' => App\Infrastructure\Seeders\DatabaseSeeder::class,
     ],
 
