@@ -1,7 +1,9 @@
 version: '2'
 services:
   nginx:
-    image: shippingdocker/nginx:latest
+    image: shippingdocker/nginx:1.2
+    ports:
+     - "80:80"
     volumes:
      - .:/var/www/html
     networks:
@@ -18,12 +20,20 @@ services:
      - appnet
   db:
     image: postgres:latest
+    ports:
+     - "5432:5432"
     environment:
       POSTGRES_PASSWORD: project-name
       POSTGRES_DB: project-name
       POSTGRES_USER: project-name
     volumes:
      - data:/var/lib/postgres
+    networks:
+     - appnet
+  mail:
+    image: mailhog/mailhog:latest
+    ports:
+     - "8025:8025"
     networks:
      - appnet
 networks:
