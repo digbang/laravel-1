@@ -20,22 +20,23 @@ class UserAddCommand extends Command
      */
     protected $description = 'Add a user to the backoffice.';
 
-	/**
-	 * Execute the console command.
-	 *
-	 * @param SecurityContext $securityContext
-	 * @return void
-	 */
+    /**
+     * Execute the console command.
+     *
+     * @param SecurityContext $securityContext
+     *
+     * @return void
+     */
     public function handle(SecurityContext $securityContext)
     {
-	    $security = $securityContext->getSecurity('backoffice');
+        $security = $securityContext->getSecurity('backoffice');
 
-	    $security->registerAndActivate([
-		    'username' => $this->argument('username'),
-		    'email'    => $this->argument('email'),
-		    'password' => $this->secret('Insert password: ')
-	    ]);
+        $security->registerAndActivate([
+            'username' => $this->argument('username'),
+            'email'    => $this->argument('email'),
+            'password' => $this->secret('Insert password: '),
+        ]);
 
-	    $this->info('User created!');
+        $this->info('User created!');
     }
 }

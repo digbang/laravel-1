@@ -18,7 +18,7 @@ trait SendsEmails
             'backoffice::emails.reset-password.subject'
         ));
     }
-    
+
     /**
      * @param User   $user
      * @param string $link
@@ -29,7 +29,7 @@ trait SendsEmails
             'backoffice::emails.activation.subject'
         ));
     }
-    
+
     /**
      * @param string $view
      * @param User   $user
@@ -39,10 +39,10 @@ trait SendsEmails
     protected function send($view, User $user, $link, $subject)
     {
         $from = config('backoffice.emails');
-        
+
         $name = $user->getName() ?: $user->getUsername();
-        
-        Mail::send($view, ['name' => $name, 'link' => $link], function (Message $message) use ($user, $from, $subject, $name){
+
+        Mail::send($view, ['name' => $name, 'link' => $link], function (Message $message) use ($user, $from, $subject, $name) {
             $message
                 ->from($from['address'], $from['name'])
                 ->to($user->getEmail(), $name)

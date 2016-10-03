@@ -38,16 +38,16 @@ class UserRoleAddCommand extends Command
         $username = $this->argument('username');
         $roleName = $this->argument('role');
 
-        /** @type User|Roleable $user */
+        /** @var User|Roleable $user */
         $user = $security->users()->findOneBy(['username' => $username]);
-    
+
         $this->assertUser($user, "Username [$username] does not exist.");
-    
-        /** @type Role $role */
+
+        /** @var Role $role */
         $role = $security->roles()->findBySlug($roleName);
-    
+
         $this->assertRoleExists($role, "Role [$roleName] does not exist. You must use the role slug to identify it.");
-    
+
         $user->addRole($role);
 
         $entityManager->persist($user);
@@ -55,10 +55,10 @@ class UserRoleAddCommand extends Command
 
         $this->info("Role [$roleName] added to user [$username].");
     }
-    
+
     /**
      * @param User|null $user
-     * @param string $message
+     * @param string    $message
      *
      * @return void
      */
@@ -66,23 +66,23 @@ class UserRoleAddCommand extends Command
     {
         if (!$user) {
             $this->error($message);
-            
+
             exit(1);
         }
-    
+
         if (!$user instanceof Roleable) {
             $this->error(
                 "The configured User class needs to extend " . Roleable::class .
                 " to use roles."
             );
-        
+
             exit(2);
         }
     }
-    
+
     /**
      * @param Role|null $role
-     * @param string $message
+     * @param string    $message
      *
      * @return void
      */
@@ -90,7 +90,7 @@ class UserRoleAddCommand extends Command
     {
         if (!$role) {
             $this->error($message);
-            
+
             exit(3);
         }
     }

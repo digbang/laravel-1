@@ -1,4 +1,5 @@
-<?php namespace App\Http\Controllers\Backoffice;
+<?php
+namespace App\Http\Controllers\Backoffice;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backoffice\LoginRequest;
@@ -6,7 +7,6 @@ use App\Http\Requests\Backoffice\ResendActivationRequest;
 use App\Http\Requests\Backoffice\ResetPasswordRequest;
 use App\Http\Routes\Backoffice\AuthRoutes;
 use App\Http\Routes\Backoffice\DashboardRoutes;
-use App\Infrastructure\Adapters\BackofficeMailer;
 use Carbon\Carbon;
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
@@ -22,254 +22,242 @@ use Illuminate\View\Factory as View;
 class AuthController extends Controller
 {
     use SendsEmails;
-    
-	/**
-	 * @type Redirector
-	 */
-	protected $redirector;
 
-	/**
-	 * @type Repository
-	 */
-	private $config;
+    /**
+     * @var Redirector
+     */
+    protected $redirector;
 
-	/**
-	 * @param Redirector  $redirector
-	 * @param Repository  $config
-	 */
-	public function __construct(Redirector $redirector, Repository $config)
-	{
-		$this->redirector = $redirector;
-		$this->config     = $config;
-	}
+    /**
+     * @var Repository
+     */
+    private $config;
 
-	/**
-	 * @param View $view
-	 *
-	 * @return \Illuminate\View\View
-	 */
-	public function login(View $view)
-	{
-		return $view->make('backoffice::auth.login');
-	}
+    /**
+     * @param Redirector $redirector
+     * @param Repository $config
+     */
+    public function __construct(Redirector $redirector, Repository $config)
+    {
+        $this->redirector = $redirector;
+        $this->config = $config;
+    }
 
-	/**
-	 * @param LoginRequest $request
-	 * @param SecurityApi  $securityApi
-	 * @param View         $view
-	 *
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function authenticate(LoginRequest $request, SecurityApi $securityApi, View $view)
-	{
-		$errors = new MessageBag();
+    /**
+     * @param View $view
+     *
+     * @return \Illuminate\View\View
+     */
+    public function login(View $view)
+    {
+        return $view->make('backoffice::auth.login');
+    }
 
-		try
-		{
-			$authenticated = $securityApi->authenticate(
-				$request->only(['email', 'username', 'login', 'password']),
-				$request->input('remember'));
+    /**
+     * @param LoginRequest $request
+     * @param SecurityApi  $securityApi
+     * @param View         $view
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function authenticate(LoginRequest $request, SecurityApi $securityApi, View $view)
+    {
+        $errors = new MessageBag();
 
-			if ($authenticated)
-			{
-				return $this->redirector->intended(
-					$securityApi->url()->route(DashboardRoutes::HOME)
-				);
-			}
+        try {
+            $authenticated = $securityApi->authenticate(
+                $request->only(['email', 'username', 'login', 'password']),
+                $request->input('remember'));
 
-			$errors->add('password', trans('backoffice::auth.validation.password.wrong'));
+            if ($authenticated) {
+                return $this->redirector->intended(
+                    $securityApi->url()->route(DashboardRoutes::HOME)
+                );
+            }
 
-			return $this->redirector->route(AuthRoutes::LOGIN)->withInput()->withErrors($errors);
-		}
-		catch (ThrottlingException $e)
-		{
-			return $view->make('backoffice::auth.throttling', [
-				'message' => trans('backoffice::auth.throttling.' . $e->getType(), ['remaining' => Carbon::now()->diffInSeconds($e->getFree())])
-			]);
-		}
-		catch (NotActivatedException $e)
-		{
-			return $view->make('backoffice::auth.not-activated');
-		}
-	}
+            $errors->add('password', trans('backoffice::auth.validation.password.wrong'));
 
-	/**
-	 * @param View $view
-	 * @return \Illuminate\Contracts\View\View
-	 */
-	public function resendActivationForm(View $view)
-	{
-		return $view->make('backoffice::auth.request-activation');
-	}
+            return $this->redirector->route(AuthRoutes::LOGIN)->withInput()->withErrors($errors);
+        } catch (ThrottlingException $e) {
+            return $view->make('backoffice::auth.throttling', [
+                'message' => trans('backoffice::auth.throttling.' . $e->getType(), ['remaining' => Carbon::now()->diffInSeconds($e->getFree())]),
+            ]);
+        } catch (NotActivatedException $e) {
+            return $view->make('backoffice::auth.not-activated');
+        }
+    }
 
-	/**
-	 * @param ResendActivationRequest $request
-	 * @param SecurityApi             $securityApi
-	 *
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function resendActivationRequest(ResendActivationRequest $request, SecurityApi $securityApi)
-	{
-		$email = $request->input('email');
+    /**
+     * @param View $view
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function resendActivationForm(View $view)
+    {
+        return $view->make('backoffice::auth.request-activation');
+    }
 
-		/** @type User $user */
-		$user = $securityApi->users()->findByCredentials(['email' => $email]);
+    /**
+     * @param ResendActivationRequest $request
+     * @param SecurityApi             $securityApi
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function resendActivationRequest(ResendActivationRequest $request, SecurityApi $securityApi)
+    {
+        $email = $request->input('email');
 
-		if (! $user)
-		{
-			$this->redirector->back()->withInput()->withErrors([
-				'email' => trans('backoffice::auth.validation.activation.incorrect', $email)
-			]);
-		}
+        /** @var User $user */
+        $user = $securityApi->users()->findByCredentials(['email' => $email]);
 
-		$activations = $securityApi->activations();
+        if (!$user) {
+            $this->redirector->back()->withInput()->withErrors([
+                'email' => trans('backoffice::auth.validation.activation.incorrect', $email),
+            ]);
+        }
 
-		/** @type Activation $activation */
-		$activation = $activations->exists($user) ?: $activations->create($user);
+        $activations = $securityApi->activations();
 
-		$this->sendActivation($user, route(
-			AuthRoutes::ACTIVATE, [
-			$user->getUserId(), $activation->getCode()
-		]));
+        /** @var Activation $activation */
+        $activation = $activations->exists($user) ?: $activations->create($user);
 
-		return $this->redirector->route(AuthRoutes::LOGIN)->with(
-			'success', trans('backoffice::auth.activation.email-sent')
-		);
-	}
+        $this->sendActivation($user, route(
+            AuthRoutes::ACTIVATE, [
+            $user->getUserId(), $activation->getCode(),
+        ]));
 
-	/**
-	 * @param SecurityApi $securityApi
-	 *
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function logout(SecurityApi $securityApi)
-	{
-		$securityApi->logout();
+        return $this->redirector->route(AuthRoutes::LOGIN)->with(
+            'success', trans('backoffice::auth.activation.email-sent')
+        );
+    }
 
-		return $this->redirector->route(AuthRoutes::LOGIN);
-	}
+    /**
+     * @param SecurityApi $securityApi
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function logout(SecurityApi $securityApi)
+    {
+        $securityApi->logout();
 
-	/**
-	 * @param User        $user
-	 * @param string      $activationCode
-	 * @param View        $view
-	 * @param SecurityApi $securityApi
-	 *
-	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
-	 */
-	public function activate(User $user, $activationCode, View $view, SecurityApi $securityApi)
-	{
-		$activations = $securityApi->activations();
+        return $this->redirector->route(AuthRoutes::LOGIN);
+    }
 
-		if ($activations->completed($user))
-		{
-			return $this->redirector->route(AuthRoutes::LOGIN)
-				->with('warning', trans('backoffice::auth.validation.user.already-active'));
-		}
+    /**
+     * @param User        $user
+     * @param string      $activationCode
+     * @param View        $view
+     * @param SecurityApi $securityApi
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function activate(User $user, $activationCode, View $view, SecurityApi $securityApi)
+    {
+        $activations = $securityApi->activations();
 
-		if ($activations->exists($user, $activationCode))
-		{
-			$activations->complete($user, $activationCode);
+        if ($activations->completed($user)) {
+            return $this->redirector->route(AuthRoutes::LOGIN)
+                ->with('warning', trans('backoffice::auth.validation.user.already-active'));
+        }
 
-			return $this->redirector->route(AuthRoutes::LOGIN)
-				->with('success', trans('backoffice::auth.activation.success'));
-		}
+        if ($activations->exists($user, $activationCode)) {
+            $activations->complete($user, $activationCode);
 
-		return $view->make('backoffice::auth.activation-expired', [
-			'email' => $this->config->get('backoffice.auth.contact')
-		]);
-	}
+            return $this->redirector->route(AuthRoutes::LOGIN)
+                ->with('success', trans('backoffice::auth.activation.success'));
+        }
 
-	/**
-	 * @param User        $user
-	 * @param string      $resetCode
-	 * @param SecurityApi $securityApi
-	 * @param View        $view
-	 *
-	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
-	 */
-	public function resetPassword(User $user, $resetCode, SecurityApi $securityApi, View $view)
-	{
-		if ($securityApi->reminders()->exists($user, $resetCode))
-		{
-			return $view->make('backoffice::auth.reset-password', [
-				'id'        => $user->getUserId(),
-				'resetCode' => $resetCode
-			]);
-		}
+        return $view->make('backoffice::auth.activation-expired', [
+            'email' => $this->config->get('backoffice.auth.contact'),
+        ]);
+    }
 
-		return $this->redirector->route(AuthRoutes::LOGIN)
-			->with('danger', trans('backoffice::auth.validation.reset-password.incorrect'));
-	}
+    /**
+     * @param User        $user
+     * @param string      $resetCode
+     * @param SecurityApi $securityApi
+     * @param View        $view
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function resetPassword(User $user, $resetCode, SecurityApi $securityApi, View $view)
+    {
+        if ($securityApi->reminders()->exists($user, $resetCode)) {
+            return $view->make('backoffice::auth.reset-password', [
+                'id'        => $user->getUserId(),
+                'resetCode' => $resetCode,
+            ]);
+        }
 
-	/**
-	 * @param User                 $user
-	 * @param string               $resetCode
-	 * @param ResetPasswordRequest $request
-	 * @param SecurityApi          $securityApi
-	 *
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function resetPasswordRequest($user, $resetCode, ResetPasswordRequest $request, SecurityApi $securityApi)
-	{
-		if ($user->getUserId() != $request->input('id'))
-		{
-			return $this->redirector->route(AuthRoutes::LOGIN);
-		}
+        return $this->redirector->route(AuthRoutes::LOGIN)
+            ->with('danger', trans('backoffice::auth.validation.reset-password.incorrect'));
+    }
 
-		$reminders = $securityApi->reminders();
+    /**
+     * @param User                 $user
+     * @param string               $resetCode
+     * @param ResetPasswordRequest $request
+     * @param SecurityApi          $securityApi
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function resetPasswordRequest($user, $resetCode, ResetPasswordRequest $request, SecurityApi $securityApi)
+    {
+        if ($user->getUserId() != $request->input('id')) {
+            return $this->redirector->route(AuthRoutes::LOGIN);
+        }
 
-		if ($reminders->exists($user, $resetCode))
-		{
-			$reminders->complete($user, $resetCode, $request->input('password'));
+        $reminders = $securityApi->reminders();
 
-			return $this->redirector->route(AuthRoutes::LOGIN)->with(
-				'success', trans('backoffice::auth.reset-password.success', ['email' => $user->getEmail()])
-			);
-		}
+        if ($reminders->exists($user, $resetCode)) {
+            $reminders->complete($user, $resetCode, $request->input('password'));
 
-		return $this->redirector->route(AuthRoutes::LOGIN)
-			->with('danger', trans('backoffice::auth.validation.reset-password.incorrect'));
-	}
+            return $this->redirector->route(AuthRoutes::LOGIN)->with(
+                'success', trans('backoffice::auth.reset-password.success', ['email' => $user->getEmail()])
+            );
+        }
 
-	/**
-	 * @param View $view
-	 *
-	 * @return \Illuminate\View\View
-	 */
-	public function forgotPassword(View $view)
-	{
-		return $view->make('backoffice::auth.request-reset-password');
-	}
+        return $this->redirector->route(AuthRoutes::LOGIN)
+            ->with('danger', trans('backoffice::auth.validation.reset-password.incorrect'));
+    }
 
-	/**
-	 * @param Request          $request
-	 * @param SecurityApi      $securityApi
-	 *
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function forgotPasswordRequest(Request $request, SecurityApi $securityApi)
-	{
-		$email = trim($request->input('email'));
+    /**
+     * @param View $view
+     *
+     * @return \Illuminate\View\View
+     */
+    public function forgotPassword(View $view)
+    {
+        return $view->make('backoffice::auth.request-reset-password');
+    }
 
-		/** @type \Digbang\Security\Users\User $user */
-		if (!$email || ! ($user = $securityApi->users()->findByCredentials(['email' => $email])))
-		{
-			return $this->redirector->back()
-				->withErrors(['email' => trans('backoffice::auth.validation.user.not-found')]);
-		}
+    /**
+     * @param Request     $request
+     * @param SecurityApi $securityApi
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function forgotPasswordRequest(Request $request, SecurityApi $securityApi)
+    {
+        $email = trim($request->input('email'));
 
-		/** @type \Digbang\Security\Reminders\Reminder $reminder */
-		$reminder = $securityApi->reminders()->create($user);
+        /** @var \Digbang\Security\Users\User $user */
+        if (!$email || !($user = $securityApi->users()->findByCredentials(['email' => $email]))) {
+            return $this->redirector->back()
+                ->withErrors(['email' => trans('backoffice::auth.validation.user.not-found')]);
+        }
 
-		$this->sendPasswordReset(
-			$user,
-			route(AuthRoutes::RESET_PASSWORD, [$user->getUserId(), $reminder->getCode()])
-		);
+        /** @var \Digbang\Security\Reminders\Reminder $reminder */
+        $reminder = $securityApi->reminders()->create($user);
 
-		return $this->redirector->route(AuthRoutes::LOGIN)
-			->with('info', trans('backoffice::auth.reset-password.email-sent',
-				['email' => $user->getEmail()]
-			));
-	}
+        $this->sendPasswordReset(
+            $user,
+            route(AuthRoutes::RESET_PASSWORD, [$user->getUserId(), $reminder->getCode()])
+        );
+
+        return $this->redirector->route(AuthRoutes::LOGIN)
+            ->with('info', trans('backoffice::auth.reset-password.email-sent',
+                ['email' => $user->getEmail()]
+            ));
+    }
 }

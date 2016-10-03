@@ -27,12 +27,12 @@ class RolePermissionAddCommand extends AddPermissionCommand
     {
         $slug = $this->argument('role');
         $role = $security->roles()->findOneBy(['slug' => $slug]);
-    
+
         $this->assertRole($role, "Role [$slug] does not exist.");
-        
+
         return $role;
     }
-    
+
     /**
      * @param object|null $role
      * @param string      $message
@@ -43,13 +43,13 @@ class RolePermissionAddCommand extends AddPermissionCommand
     {
         if (!$role) {
             $this->error($message);
-            
+
             exit(1);
         }
-    
+
         if (!$role instanceof Permissible) {
             $this->error('The configured Role class needs to extend ' . Permissible::class . ' to use permissions.');
-            
+
             exit(2);
         }
     }

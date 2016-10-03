@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     private $bindings = [
         //
     ];
-    
+
     /**
      * Bootstrap any application services.
      *
@@ -37,12 +37,12 @@ class AppServiceProvider extends ServiceProvider
         foreach ($this->bindings as $abstract => $concrete) {
             $this->app->bind($abstract, $concrete);
         }
-        
+
         $this->app->afterResolving(EntityFactory::class, function (EntityFactory $factory) {
             $this->defineFakeEntities($factory);
         });
     }
-    
+
     /**
      * Here you may define all of your entity factories. Entity factories give
      * you a convenient way to create entities for testing and seeding your
@@ -54,11 +54,11 @@ class AppServiceProvider extends ServiceProvider
     {
         $factory->define(\App\User::class, function (Faker $faker) {
             static $password;
-        
+
             return [
-                'name' => $faker->name,
-                'email' => $faker->unique()->safeEmail,
-                'password' => $password ?: $password = bcrypt('secret'),
+                'name'           => $faker->name,
+                'email'          => $faker->unique()->safeEmail,
+                'password'       => $password ?: $password = bcrypt('secret'),
                 'remember_token' => str_random(10),
             ];
         });

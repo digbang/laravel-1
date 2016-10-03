@@ -18,19 +18,19 @@ abstract class AddPermissionCommand extends Command
     public function handle(SecurityContext $securityContext, EntityManager $entityManager)
     {
         $security = $securityContext->getSecurity('backoffice');
-        
+
         $permissible = $this->getPermissible($security);
         $permissions = $this->getPermissions($security);
-        
+
         foreach ($permissions as $permission) {
             $permissible->addPermission($permission);
-            
+
             $this->info("Permission [$permission] added.");
         }
-        
+
         $entityManager->flush($permissible);
     }
-    
+
     /**
      * @param SecurityApi $security
      *
@@ -39,16 +39,17 @@ abstract class AddPermissionCommand extends Command
     protected function getPermissions(SecurityApi $security)
     {
         $permissions = $this->argument('permissions');
-        
+
         if ($permissions) {
             return array_map('trim', explode(',', $permissions));
         }
-        
+
         return $security->permissions()->all();
     }
-    
+
     /**
      * @param SecurityApi $security
+     *
      * @return Permissible
      */
     abstract protected function getPermissible(SecurityApi $security);

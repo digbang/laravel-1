@@ -19,17 +19,17 @@ class UserPermissionAddCommand extends AddPermissionCommand
      * @var string
      */
     protected $description = 'Add permission/s to a backoffice user.';
-    
+
     /**
      * {@inheritdoc}
      */
     protected function getPermissible(SecurityApi $security)
     {
         $username = $this->argument('username');
-        
+
         $user = $security->users()->findOneBy(['username' => $username]);
         $this->assertUser($user, "Username [$username] does not exist.");
-        
+
         return $user;
     }
 
@@ -43,13 +43,13 @@ class UserPermissionAddCommand extends AddPermissionCommand
     {
         if (!$user) {
             $this->error($message);
-            
+
             exit(1);
         }
-        
+
         if (!$user instanceof Permissible) {
             $this->error('The configured User class needs to extend ' . Permissible::class . ' to use permissions.');
-            
+
             exit(2);
         }
     }

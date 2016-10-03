@@ -23,20 +23,20 @@ class RoleController extends Controller
     use BackofficeTrait;
 
     /**
-     * @type string
+     * @var string
      */
     protected $title;
 
     /**
-     * @type string
+     * @var string
      */
     protected $titlePlural;
 
     /**
-     * @type array
+     * @var array
      */
     private $sortings = [
-        'name' => 'r.name'
+        'name' => 'r.name',
     ];
 
     /**
@@ -44,12 +44,13 @@ class RoleController extends Controller
      */
     public function __construct()
     {
-        $this->title       = trans('backoffice::auth.role');
+        $this->title = trans('backoffice::auth.role');
         $this->titlePlural = trans('backoffice::auth.roles');
     }
 
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request)
@@ -100,17 +101,14 @@ class RoleController extends Controller
 
     public function store(CreateRoleRequest $request)
     {
-        try
-        {
+        try {
             $roles = $this->security()->roles();
 
             /** @var Role|Permissible $role */
             $role = $roles->create($request->input('name'), $request->input('slug') ?: null);
 
-            if ($request->input('permissions') && $role instanceof Permissible)
-            {
-                foreach ((array) $request->input('permissions') as $permission)
-                {
+            if ($request->input('permissions') && $role instanceof Permissible) {
+                foreach ((array) $request->input('permissions') as $permission) {
                     $role->addPermission($permission);
                 }
 
@@ -120,9 +118,7 @@ class RoleController extends Controller
             return $this->redirect()->to(
                 $this->security()->url()->route(RoleRoutes::SHOW, $role->getRoleSlug())
             );
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return $this->redirect()->back()->withInput()->withErrors($e->getErrors());
         }
     }
@@ -143,38 +139,35 @@ class RoleController extends Controller
             ),
         ];
 
-
         $actions = $this->backoffice()->actions();
 
-	    try
-	    {
-		    $actions->link(
-			    $this->security()->url()->route(RoleRoutes::EDIT, $role->getRoleSlug()),
-			    FontAwesome::icon('edit') . ' ' . trans('backoffice::default.edit'),
-			    ['class' => 'btn btn-success']
-		    );
-	    }
-		catch (SecurityException $e){ }
+        try {
+            $actions->link(
+                $this->security()->url()->route(RoleRoutes::EDIT, $role->getRoleSlug()),
+                FontAwesome::icon('edit') . ' ' . trans('backoffice::default.edit'),
+                ['class' => 'btn btn-success']
+            );
+        } catch (SecurityException $e) {
+        }
 
-	    try {
+        try {
             $actions->link(
                 $this->security()->url()->route(RoleRoutes::INDEX),
                 trans('backoffice::default.back'),
                 ['class' => 'btn btn-default']
             );
-	    }
-	    catch (SecurityException $e){ }
+        } catch (SecurityException $e) {
+        }
 
         $topActions = $this->backoffice()->actions();
 
-	    try
-	    {
-		    $topActions->link(
-			    $this->security()->url()->route(RoleRoutes::INDEX),
-			    FontAwesome::icon('arrow-left') . ' ' . trans('backoffice::default.back')
-		    );
-	    }
-	    catch (SecurityException $e){ }
+        try {
+            $topActions->link(
+                $this->security()->url()->route(RoleRoutes::INDEX),
+                FontAwesome::icon('arrow-left') . ' ' . trans('backoffice::default.back')
+            );
+        } catch (SecurityException $e) {
+        }
 
         return $this->view()->make('backoffice::show', [
             'title'      => $this->titlePlural,
@@ -195,13 +188,13 @@ class RoleController extends Controller
             $this->security()->url()->route(RoleRoutes::SHOW, $role->getRoleSlug())
         );
 
-	    $permissions = $role->getPermissions()->map(function(Permission $permission){
-		    return $permission->getName();
-	    })->toArray();
+        $permissions = $role->getPermissions()->map(function (Permission $permission) {
+            return $permission->getName();
+        })->toArray();
 
         $form->fill([
-	        'name'          => $role->getName(),
-	        'permissions[]' => $permissions,
+            'name'          => $role->getName(),
+            'permissions[]' => $permissions,
         ]);
 
         $breadcrumb = $this->backoffice()->breadcrumb([
@@ -220,12 +213,10 @@ class RoleController extends Controller
 
     public function update(Role $role, UpdateRoleRequest $request)
     {
-        try
-        {
+        try {
             $role->setName($request->input('name'));
 
-            if ($role instanceof Permissible)
-            {
+            if ($role instanceof Permissible) {
                 $role->syncPermissions((array) $request->input('permissions'));
             }
 
@@ -234,17 +225,14 @@ class RoleController extends Controller
             return $this->redirect()->to(
                 $this->security()->url()->route(RoleRoutes::SHOW, [$role->getRoleSlug()])
             );
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return $this->redirect()->back()->withInput()->withErrors($e->getErrors());
         }
     }
 
     public function destroy(Role $role)
     {
-        try
-        {
+        try {
             $this->security()->roles()->delete($role);
 
             return $this->redirect()->to(
@@ -255,9 +243,7 @@ class RoleController extends Controller
                     ['model' => $this->title, 'id' => $role->getName()]
                 )
             );
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return $this->redirect()->back()->withDanger(implode('<br/>', $e->getErrors()));
         }
     }
@@ -269,7 +255,7 @@ class RoleController extends Controller
         $list->fill($this->getData($request, null));
 
         $columns = $list->columns()->hide(['id'])->sortable([]);
-        $rows    = $list->rows();
+        $rows = $list->rows();
 
         $fileName = (new \DateTime())->format('Y-m-d') . '_' . $this->titlePlural;
 
@@ -325,32 +311,30 @@ class RoleController extends Controller
     protected function getListing()
     {
         $listing = $this->backoffice()->listing([
-            'name' => trans('backoffice::auth.name'),
+            'name'  => trans('backoffice::auth.name'),
             'users' => trans('backoffice::auth.users'),
-            'id', 'slug'
+            'id', 'slug',
         ]);
 
         $columns = $listing->columns();
         $columns->hide(['id', 'slug'])->sortable(['name']);
 
-        $listing->addValueExtractor('id', function(Role $role){
+        $listing->addValueExtractor('id', function (Role $role) {
             return $role->getRoleId();
         });
 
-        $listing->addValueExtractor('slug', function(Role $role){
+        $listing->addValueExtractor('slug', function (Role $role) {
             return $role->getRoleSlug();
         });
 
-        $listing->addValueExtractor('users', function(Role $role){
+        $listing->addValueExtractor('users', function (Role $role) {
             $users = [];
-            foreach ($role->getUsers() as $user)
-            {
-                /** @type User $user */
+            foreach ($role->getUsers() as $user) {
+                /* @type User $user */
                 $users[] = $user->getUsername();
             }
 
-            if (count($users) < 5)
-            {
+            if (count($users) < 5) {
                 return implode(', ', $users);
             }
 
@@ -362,27 +346,25 @@ class RoleController extends Controller
 
     protected function buildListActions(Listing $list, Request $request)
     {
-	    $actions = $this->backoffice()->actions();
+        $actions = $this->backoffice()->actions();
 
-	    try
-	    {
-		    $actions->link(
-			    $this->security()->url()->route(RoleRoutes::CREATE),
-			    FontAwesome::icon('plus') . ' ' . trans('backoffice::default.new', ['model' => $this->title]),
-			    ['class' => 'btn btn-primary']
-		    );
-	    }
-	    catch (SecurityException $e){}
+        try {
+            $actions->link(
+                $this->security()->url()->route(RoleRoutes::CREATE),
+                FontAwesome::icon('plus') . ' ' . trans('backoffice::default.new', ['model' => $this->title]),
+                ['class' => 'btn btn-primary']
+            );
+        } catch (SecurityException $e) {
+        }
 
-	    try
-	    {
-			$actions->link(
-			    $this->security()->url()->route(RoleRoutes::EXPORT, $request->all()),
-			    FontAwesome::icon('file-excel-o') . ' ' . trans('backoffice::default.export'),
-			    ['class' => 'btn btn-success']
-		    );
-	    }
-		catch (SecurityException $e){}
+        try {
+            $actions->link(
+                $this->security()->url()->route(RoleRoutes::EXPORT, $request->all()),
+                FontAwesome::icon('file-excel-o') . ' ' . trans('backoffice::default.export'),
+                ['class' => 'btn btn-success']
+            );
+        } catch (SecurityException $e) {
+        }
 
         $list->setActions($actions);
 
@@ -392,7 +374,9 @@ class RoleController extends Controller
                 ->link(function (Collection $row) {
                     try {
                         return $this->security()->url()->route(RoleRoutes::SHOW, $row['slug']);
-                    } catch (SecurityException $e) { return false; }
+                    } catch (SecurityException $e) {
+                        return false;
+                    }
                 }, FontAwesome::icon('eye'), [
                     'data-toggle'    => 'tooltip',
                     'data-placement' => 'top',
@@ -435,11 +419,12 @@ class RoleController extends Controller
     /**
      * @param Request $request
      * @param int     $limit
+     *
      * @return array
      */
     protected function getData(Request $request, $limit = 10)
     {
-        /** @type \Digbang\Backoffice\Repositories\DoctrineRoleRepository $roles */
+        /** @var \Digbang\Backoffice\Repositories\DoctrineRoleRepository $roles */
         $roles = $this->security()->roles();
 
         return $roles->search(
@@ -452,11 +437,11 @@ class RoleController extends Controller
 
     private function getSorting(Request $request)
     {
-        $sortBy    = $request->input('sort_by')    ?: 'name';
+        $sortBy = $request->input('sort_by')    ?: 'name';
         $sortSense = $request->input('sort_sense') ?: 'asc';
 
         return [
-            $this->sortings[$sortBy] => $sortSense
+            $this->sortings[$sortBy] => $sortSense,
         ];
     }
 }
