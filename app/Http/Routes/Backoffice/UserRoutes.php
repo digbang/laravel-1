@@ -2,14 +2,11 @@
 namespace App\Http\Routes\Backoffice;
 
 use App\Http\Controllers\Backoffice\UserController;
-use Digbang\Security\Permissions\Permission;
-use Digbang\Security\SecurityContext;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Routing\Registrar;
-use Illuminate\Routing\Router;
-use LaravelBA\RouteBinder\RouteBinder;
+use LaravelBA\RouteBinder\Routes;
 
-class UserRoutes implements RouteBinder
+class UserRoutes implements Routes
 {
     const EXPORT = "backoffice.backoffice-users.export";
     const INDEX = "backoffice.backoffice-users.index";
@@ -28,15 +25,9 @@ class UserRoutes implements RouteBinder
      */
     private $config;
 
-    /**
-     * @var SecurityContext
-     */
-    private $securityContext;
-
-    public function __construct(Repository $config, SecurityContext $securityContext)
+    public function __construct(Repository $config)
     {
         $this->config = $config;
-        $this->securityContext = $securityContext;
     }
 
     /**
@@ -59,27 +50,6 @@ class UserRoutes implements RouteBinder
 
             $router->post('{backoffice_username}/resend-activation', ['as' => static::RESEND_ACTIVATION, 'uses' => UserController::class . '@resendActivation', 'permission' => 'backoffice.users.update']);
             $router->post('{backoffice_username}/reset-password',    ['as' => static::RESET_PASSWORD,    'uses' => UserController::class . '@resetPassword',    'permission' => 'backoffice.users.update']);
-        });
-    }
-
-    /**
-     * Bind parameters, filters or anything you need to do
-     * with the concrete router here.
-     *
-     * NOTE: If an object that's not an instance (nor an extension) of the concrete
-     * \Illuminate\Routing\Router is bound as the \Illuminate\Contracts\Routing\Registrar
-     * in the Container, **this method will never be called!**
-     *
-     * @param Router $router
-     *
-     * @return void
-     */
-    public function addBindings(Router $router)
-    {
-        $router->bind('backoffice_username', function ($username) {
-            return $this->securityContext->getSecurity('backoffice')->users()->findByCredentials([
-                'username' => $username,
-            ]);
         });
     }
 }

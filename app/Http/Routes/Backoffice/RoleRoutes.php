@@ -2,13 +2,11 @@
 namespace App\Http\Routes\Backoffice;
 
 use App\Http\Controllers\Backoffice\RoleController;
-use Digbang\Security\SecurityContext;
-use Illuminate\Config\Repository;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Routing\Registrar;
-use Illuminate\Routing\Router;
-use LaravelBA\RouteBinder\RouteBinder;
+use LaravelBA\RouteBinder\Routes;
 
-class RoleRoutes implements RouteBinder
+class RoleRoutes implements Routes
 {
     const EXPORT = "backoffice.backoffice-roles.export";
     const INDEX = "backoffice.backoffice-roles.index";
@@ -25,18 +23,11 @@ class RoleRoutes implements RouteBinder
     private $config;
 
     /**
-     * @var SecurityContext
+     * @param Repository $config
      */
-    private $securityContext;
-
-    /**
-     * @param Repository      $config
-     * @param SecurityContext $securityContext
-     */
-    public function __construct(Repository $config, SecurityContext $securityContext)
+    public function __construct(Repository $config)
     {
         $this->config = $config;
-        $this->securityContext = $securityContext;
     }
 
     /**
@@ -56,25 +47,6 @@ class RoleRoutes implements RouteBinder
             $router->match(['PUT', 'PATCH'],
                 "{backoffice_role_slug}",               ["as" => static::UPDATE,  "uses" => RoleController::class . '@update',  "permission" => 'backoffice.roles.update']);
             $router->delete("{backoffice_role_slug}",   ["as" => static::DESTROY, "uses" => RoleController::class . '@destroy', "permission" => 'backoffice.roles.delete']);
-        });
-    }
-
-    /**
-     * Bind parameters, filters or anything you need to do
-     * with the concrete router here.
-     *
-     * NOTE: If an object that's not an instance (nor an extension) of the concrete
-     * \Illuminate\Routing\Router is bound as the \Illuminate\Contracts\Routing\Registrar
-     * in the Container, **this method will never be called!**
-     *
-     * @param Router $router
-     *
-     * @return void
-     */
-    public function addBindings(Router $router)
-    {
-        $router->bind('backoffice_role_slug', function ($slug) {
-            return $this->securityContext->getSecurity('backoffice')->roles()->findBySlug($slug);
         });
     }
 }

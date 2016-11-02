@@ -15,7 +15,7 @@
         "gedmo/doctrine-extensions": "^2.4",
         "beberlei/DoctrineExtensions": "^1.0",
         "digbang/backoffice": "^4.2",
-        "laravelba/route-binder": "^4.0",
+        "laravelba/route-binder": "^4.0.2",
         "laravelcollective/html": "^5.3"
     },
     "require-dev": {
