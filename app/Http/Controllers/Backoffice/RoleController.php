@@ -368,52 +368,54 @@ class RoleController extends Controller
 
         $list->setActions($actions);
 
-        $list->setRowActions(
-            $this->backoffice()->actions()
+        $rowActions = $this->backoffice()->actions();
+
                 // View icon
-                ->link(function (Collection $row) {
-                    try {
-                        return $this->security()->url()->route(RoleRoutes::SHOW, $row['slug']);
-                    } catch (SecurityException $e) {
-                        return false;
-                    }
-                }, FontAwesome::icon('eye'), [
-                    'data-toggle'    => 'tooltip',
-                    'data-placement' => 'top',
-                    'title'          => trans('backoffice::default.show'),
-                ])
-                // Edit icon
-                ->link(function (Collection $row) {
-                    try {
-                        return $this->security()->url()->route(RoleRoutes::EDIT, $row['slug']);
-                    } catch (SecurityException $e) {
-                        return false;
-                    }
-                }, FontAwesome::icon('edit'), [
-                    'data-toggle'    => 'tooltip',
-                    'data-placement' => 'top',
-                    'title'          => trans('backoffice::default.edit'),
-                ])
-                // Delete icon
-                ->form(
-                    function (Collection $row) {
-                        try {
-                            return $this->security()->url()->route(RoleRoutes::DESTROY, $row['slug']);
-                        } catch (SecurityException $e) {
-                            return false;
-                        }
-                    },
-                    FontAwesome::icon('times'),
-                    'DELETE',
-                    [
-                        'class'          => 'text-danger',
-                        'data-toggle'    => 'tooltip',
-                        'data-placement' => 'top',
-                        'data-confirm'   => trans('backoffice::default.delete-confirm'),
-                        'title'          => trans('backoffice::default.delete'),
-                    ]
-                )
+        $rowActions->link(function (Collection $row) {
+            try {
+                return $this->security()->url()->route(RoleRoutes::SHOW, $row['slug']);
+            } catch (SecurityException $e) {
+                return false;
+            }
+        }, FontAwesome::icon('eye'), [
+            'data-toggle'    => 'tooltip',
+            'data-placement' => 'top',
+            'title'          => trans('backoffice::default.show'),
+        ]);
+
+        // Edit icon
+        $rowActions->link(function (Collection $row) {
+            try {
+                return $this->security()->url()->route(RoleRoutes::EDIT, $row['slug']);
+            } catch (SecurityException $e) {
+                return false;
+            }
+        }, FontAwesome::icon('edit'), [
+            'data-toggle'    => 'tooltip',
+            'data-placement' => 'top',
+            'title'          => trans('backoffice::default.edit'),
+        ]);
+        // Delete icon
+        $rowActions->form(
+            function (Collection $row) {
+                try {
+                    return $this->security()->url()->route(RoleRoutes::DESTROY, $row['slug']);
+                } catch (SecurityException $e) {
+                    return false;
+                }
+            },
+            FontAwesome::icon('times'),
+            'DELETE',
+            [
+                'class'          => 'text-danger',
+                'data-toggle'    => 'tooltip',
+                'data-placement' => 'top',
+                'data-confirm'   => trans('backoffice::default.delete-confirm'),
+                'title'          => trans('backoffice::default.delete'),
+            ]
         );
+
+        $list->setRowActions($rowActions);
     }
 
     /**
@@ -421,6 +423,7 @@ class RoleController extends Controller
      * @param int     $limit
      *
      * @return array
+     * @throws \Doctrine\ORM\Mapping\MappingException
      */
     protected function getData(Request $request, $limit = 10)
     {
