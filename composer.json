@@ -16,7 +16,8 @@
         "beberlei/DoctrineExtensions": "^1.0",
         "digbang/backoffice": "^4.2",
         "laravelba/route-binder": "^4.0.2",
-        "laravelcollective/html": "^5.3"
+        "laravelcollective/html": "^5.3",
+        "beberlei/assert": "^2.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
