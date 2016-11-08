@@ -8,7 +8,7 @@ use LaravelBA\RouteBinder\Bindings;
 
 class UserBindings implements Bindings
 {
-    const ID       = 'backoffice_user_id';
+    const ID = 'backoffice_user_id';
     const USERNAME = 'backoffice_username';
 
     /**

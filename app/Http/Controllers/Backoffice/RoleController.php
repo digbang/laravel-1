@@ -422,8 +422,9 @@ class RoleController extends Controller
      * @param Request $request
      * @param int     $limit
      *
-     * @return array
      * @throws \Doctrine\ORM\Mapping\MappingException
+     *
+     * @return array
      */
     protected function getData(Request $request, $limit = 10)
     {
