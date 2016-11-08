@@ -7,12 +7,14 @@ use LaravelBA\RouteBinder\Bindings;
 
 class RoleBindings implements Bindings
 {
+    const SLUG = 'backoffice_role_slug';
+
     /**
      * {@inheritdoc}
      */
     public function addBindings(Router $router)
     {
-        $router->bind('backoffice_role_slug', function ($slug) {
+        $router->bind(static::SLUG, function ($slug) {
             $securityContext = app(SecurityContext::class);
 
             return $securityContext->getSecurity('backoffice')->roles()->findBySlug($slug) ?: abort(404);
