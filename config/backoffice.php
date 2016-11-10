@@ -86,7 +86,7 @@ return [
                 'icon'   => 'user',
                 'action' => App\Http\Controllers\Backoffice\UserController::class . '@index'
             ],
-            'Backoffice groups' => [
+            'Backoffice roles' => [
                 'icon'   => 'group',
                 'action' => App\Http\Controllers\Backoffice\RoleController::class . '@index'
             ]
