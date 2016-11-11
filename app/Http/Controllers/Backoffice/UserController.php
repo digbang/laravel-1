@@ -2,7 +2,10 @@
 namespace App\Http\Controllers\Backoffice;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Backoffice\CreateUserRequest;
+use App\Http\Requests\Backoffice\UpdateUserRequest;
 use App\Http\Routes\Backoffice\AuthRoutes;
+use App\Http\Routes\Backoffice\DashboardRoutes;
 use App\Http\Routes\Backoffice\UserRoutes;
 use Carbon\Carbon;
 use Digbang\Backoffice\Exceptions\ValidationException;
@@ -20,7 +23,6 @@ use Digbang\Security\Users\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Factory;
 
 class UserController extends Controller
 {
@@ -70,7 +72,7 @@ class UserController extends Controller
         $list->fill($this->getData($request));
 
         $breadcrumb = $this->backoffice()->breadcrumb([
-            trans('backoffice::default.home') => 'backoffice.index',
+            trans('backoffice::default.home') => DashboardRoutes::HOME,
             $this->titlePlural,
         ]);
 
@@ -94,7 +96,7 @@ class UserController extends Controller
         );
 
         $breadcrumb = $this->backoffice()->breadcrumb([
-            trans('backoffice::default.home') => 'backoffice.index',
+            trans('backoffice::default.home') => DashboardRoutes::HOME,
             $this->titlePlural                => UserRoutes::INDEX,
             $label,
         ]);
@@ -106,40 +108,23 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(Request $request, Factory $validation)
+    public function store(CreateUserRequest $request)
     {
         $input = $request->only([
             'firstName',
             'lastName',
             'email',
-                    'password',
-                    'activated',
+            'password',
+            'activated',
             'username',
             'roles',
             'permissions',
         ]);
 
         try {
-            $this->doValidation($input, $validation);
-
             /** @var User $user */
             $user = $this->security()->users()->create($input, function (User $user) use ($input) {
-                if ($user instanceof Roleable && !empty($input['roles'])) {
-                    /* @type Roleable $user */
-                    foreach ($input['roles'] as $role) {
-                        /** @var Role $role */
-                                    if ($role = $this->security()->roles()->findBySlug($role)) {
-                                        $user->addRole($role);
-                                    }
-                    }
-                }
-
-                if ($user instanceof Permissible && !empty($input['permissions'])) {
-                    /* @type Permissible $user */
-                    foreach ($input['permissions'] as $permission) {
-                        $user->addPermission($permission);
-                    }
-                }
+                $this->addRoles($user, $input['roles']);
             });
 
             if ($input['activated']) {
@@ -148,24 +133,19 @@ class UserController extends Controller
                 /** @var Activation $activation */
                 $activation = $this->security()->activations()->create($user);
 
-                $this->sendActivation(
-                    $user,
-                    route(AuthRoutes::ACTIVATE, [$activation->getCode()])
-                );
+                $this->sendActivation($user,route(AuthRoutes::ACTIVATE, [$activation->getCode()]));
             }
 
             return $this->redirect()->to($this->url()->route(UserRoutes::SHOW, $user->getUsername()));
-        } catch (ValidationException $e) {
-            return $this->redirect()->back()->withInput()->withErrors($e->getErrors());
         } catch (SecurityException $e) {
-            return $this->redirect()->to($this->url()->route('backoffice.index'));
+            return $this->redirect()->to($this->url()->route(DashboardRoutes::HOME));
         }
     }
 
     public function show(User $user)
     {
         $breadcrumb = $this->backoffice()->breadcrumb([
-            trans('backoffice::default.home') => 'backoffice.index',
+            trans('backoffice::default.home') => DashboardRoutes::HOME,
             $this->titlePlural                => UserRoutes::INDEX,
             trans('backoffice::auth.user_name', [
                 'name'     => $user->getName()->getFirstName(),
@@ -265,7 +245,7 @@ class UserController extends Controller
         $form->fill($data);
 
         $breadcrumb = $this->backoffice()->breadcrumb([
-            trans('backoffice::default.home') => 'backoffice.index',
+            trans('backoffice::default.home') => DashboardRoutes::HOME,
             $this->titlePlural                => UserRoutes::INDEX,
             trans('backoffice::auth.user_name', [
                 'name'     => $user->getName()->getFirstName(),
@@ -281,26 +261,10 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(User $user, Request $request, Factory $validation)
+    public function update(User $user, UpdateUserRequest $request)
     {
-        // Get the input
-        $inputData = $request->only([
-            'firstName',
-            'lastName',
-            'email',
-            'username',
-            'password',
-            'roles',
-            'permissions',
-        ]);
-
-        if (empty($inputData['password'])) {
-            unset($inputData['password']);
-        }
-
         try {
-            $this->doValidation($inputData, $validation, $user);
-            $inputData = $request->only([
+            $this->security()->users()->update($user, $request->only([
                 'firstName',
                 'lastName',
                 'email',
@@ -309,17 +273,11 @@ class UserController extends Controller
                 'activated',
                 'roles',
                 'permissions',
-            ]);
-
-            $inputData['activated'] = $request->input('activated') ?: false;
-
-            $this->security()->users()->update($user, $inputData);
+            ]));
 
             return $this->redirect()->to($this->url()->route(UserRoutes::SHOW, [$user->getUsername()]));
-        } catch (ValidationException $e) {
-            return $this->redirect()->back()->withInput()->withErrors($e->getErrors());
         } catch (SecurityException $e) {
-            return $this->redirect()->to($this->url()->route('backoffice.index'));
+            return $this->redirect()->to($this->url()->route(DashboardRoutes::HOME));
         }
     }
 
@@ -335,7 +293,7 @@ class UserController extends Controller
         } catch (ValidationException $e) {
             return $this->redirect()->back()->withDanger(implode('<br/>', $e->getErrors()));
         } catch (SecurityException $e) {
-            return $this->redirect()->to($this->url()->route('backoffice.index'))->withDanger(
+            return $this->redirect()->to($this->url()->route(DashboardRoutes::HOME))->withDanger(
                 trans('backoffice::auth.permission_error')
             );
         }
@@ -395,11 +353,12 @@ class UserController extends Controller
 
         $inputs = $form->inputs();
 
-        $inputs->text('firstName',    trans('backoffice::auth.first_name'));
-        $inputs->text('lastName',     trans('backoffice::auth.last_name'));
-        $inputs->text('email',        trans('backoffice::auth.email'));
-        $inputs->text('username',     trans('backoffice::auth.username'));
-        $inputs->password('password', trans('backoffice::auth.password'));
+        $inputs->text('firstName',                 trans('backoffice::auth.first_name'));
+        $inputs->text('lastName',                  trans('backoffice::auth.last_name'));
+        $inputs->text('email',                     trans('backoffice::auth.email'));
+        $inputs->text('username',                  trans('backoffice::auth.username'));
+        $inputs->password('password',              trans('backoffice::auth.password'));
+        $inputs->password('password_confirmation', trans('backoffice::auth.confirm_password'));
 
         if (!$user) {
             $inputs->checkbox('activated', trans('backoffice::auth.activated'));
@@ -622,54 +581,26 @@ class UserController extends Controller
         );
     }
 
-    /**
-     * @param array     $data
-     * @param Factory   $validation
-     * @param User|null $userToUpdate
-     */
-    protected function doValidation($data, Factory $validation, User $userToUpdate = null)
-    {
-        $rules = [
-            'email'    => 'required|email|user_email_unique',
-            'password' => ($userToUpdate !== null ? 'sometimes|' : '') . 'required|min:3',
-            'username' => 'required|user_username_unique',
-        ];
-
-        $validation->extend('user_email_unique', function ($attribute, $value, $parameters) use ($userToUpdate) {
-            $user = $this->security()->users()->findByCredentials(['login' => $value]);
-
-            return $user === null || ($userToUpdate !== null && $userToUpdate->getEmail() == $value);
-        });
-
-        $validation->extend('user_username_unique', function ($attribute, $value, $parameters) use ($userToUpdate) {
-            $user = $this->security()->users()->findByCredentials(['login' => $value]);
-
-            return $user === null || ($userToUpdate !== null && $userToUpdate->getUsername() == $value);
-        });
-
-        $messages = [
-            'email.required'                => trans('backoffice::auth.validation.user.email-required'),
-            'email.user_email_unique'       => trans('backoffice::auth.validation.user.user-email-repeated'),
-            'username.required'             => trans('backoffice::auth.validation.user.user-username-repeated'),
-            'username.user_username_unique' => trans('backoffice::auth.validation.user.user-username-repeated'),
-            'password.required'             => trans('backoffice::auth.validation.user.password-required'),
-        ];
-
-        /* @var $validator \Illuminate\Validation\Validator */
-        $validator = $validation->make($data, $rules, $messages);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator->errors());
-        }
-    }
-
     private function getSorting(Request $request)
     {
-        $sortBy = $request->input('sort_by')    ?: 'firstName';
+        $sortBy = $request->input('sort_by') ?: 'firstName';
         $sortSense = $request->input('sort_sense') ?: 'asc';
 
         return [
             $this->sortings[$sortBy] => $sortSense,
         ];
+    }
+
+    private function addRoles(User $user, array $roles)
+    {
+        if ($user instanceof Roleable && !empty($roles)) {
+            /* @var Roleable $user */
+            foreach ($roles as $role) {
+                /** @var Role $role */
+                if ($role = $this->security()->roles()->findBySlug($role)) {
+                    $user->addRole($role);
+                }
+            }
+        }
     }
 }
