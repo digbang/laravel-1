@@ -40,7 +40,7 @@ class UserRoutes implements Routes
      */
     public function addRoutes(Registrar $router)
     {
-        $prefix = $this->config->get('backoffice.auth.users_url', 'backoffice-users');
+        $prefix = $this->config->get('backoffice.auth.users.url', 'backoffice-users');
 
         $router->group(['prefix' => "backoffice/$prefix", 'middleware' => ['web', 'security:backoffice']], function (Registrar $router) {
             $router->get('export',                    ['as' => static::EXPORT,  'uses' => UserController::class . '@export',  'permission' => static::PERMISSION_READ]);

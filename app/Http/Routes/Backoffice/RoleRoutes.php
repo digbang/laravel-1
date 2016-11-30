@@ -36,7 +36,7 @@ class RoleRoutes implements Routes
      */
     public function addRoutes(Registrar $router)
     {
-        $prefix = $this->config->get('backoffice.auth.groups_url', 'backoffice-roles');
+        $prefix = $this->config->get('backoffice.auth.roles.url', 'backoffice-roles');
 
         $router->group(['prefix' => "backoffice/$prefix", 'middleware' => ['web', 'security:backoffice']], function () use ($router) {
             $router->get('export',                      ['as' => static::EXPORT,  'uses' => RoleController::class . '@export',  'permission' => 'backoffice.roles.list']);
