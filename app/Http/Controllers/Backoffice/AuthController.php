@@ -252,7 +252,7 @@ class AuthController extends Controller
 
         $this->sendPasswordReset(
             $user,
-            route(AuthRoutes::RESET_PASSWORD, [$user->getUserId(), $reminder->getCode()])
+            route(AuthRoutes::RESET, [$user->getUserId(), $reminder->getCode()])
         );
 
         return $this->redirector->route(AuthRoutes::LOGIN)

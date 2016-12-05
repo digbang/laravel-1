@@ -18,7 +18,7 @@ class UserRoutes implements Routes
     const UPDATE = 'backoffice.backoffice-users.update';
     const DESTROY = 'backoffice.backoffice-users.destroy';
     const RESEND_ACTIVATION = 'backoffice.backoffice-users.resend-activation';
-    const RESET_PASSWORD = 'backoffice.backoffice-users.reset-password';
+    const RESET = 'backoffice.backoffice-users.reset-password';
 
     const PERMISSION_CREATE = 'backoffice.users.create';
     const PERMISSION_READ = 'backoffice.users.read';
@@ -54,7 +54,7 @@ class UserRoutes implements Routes
             $router->delete('{'.Bind::USERNAME.'}',   ['as' => static::DESTROY, 'uses' => UserController::class . '@destroy', 'permission' => static::PERMISSION_DELETE]);
 
             $router->post('{'.Bind::USERNAME.'}/resend-activation', ['as' => static::RESEND_ACTIVATION, 'uses' => UserController::class . '@resendActivation', 'permission' => static::PERMISSION_UPDATE]);
-            $router->post('{'.Bind::USERNAME.'}/reset-password',    ['as' => static::RESET_PASSWORD,    'uses' => UserController::class . '@resetPassword',    'permission' => static::PERMISSION_UPDATE]);
+            $router->post('{'.Bind::USERNAME.'}/reset-password',    ['as' => static::RESET, 'uses' => UserController::class . '@resetPassword', 'permission' => static::PERMISSION_UPDATE]);
         });
     }
 }

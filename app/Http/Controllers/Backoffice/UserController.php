@@ -329,7 +329,7 @@ class UserController extends Controller
 
         $this->sendPasswordReset(
             $user,
-            route(AuthRoutes::RESET_PASSWORD, [$user->getUsername(), $reminder->getCode()])
+            route(AuthRoutes::RESET, [$user->getUsername(), $reminder->getCode()])
         );
 
         return $this->redirect()->back()->withSuccess(trans('backoffice::auth.reset-password.email-sent', ['email' => $user->getEmail()]));
@@ -511,7 +511,7 @@ class UserController extends Controller
         $rowActions->form(
             function (Collection $row) {
                 try {
-                    return $this->url()->route(UserRoutes::RESET_PASSWORD, $row['username']);
+                    return $this->url()->route(UserRoutes::RESET, $row['username']);
                 } catch (SecurityException $e) {
                     return false;
                 }
