@@ -53,12 +53,13 @@
     },
     "scripts": {
         "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+            "sed -i \"s/project-name/${PWD##*/}/g\" .env.example docker-compose.yml",
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate",
-            "sed -i \"s/project-name/${PWD##*/}/g\" .env.example docker-compose.yml",
-            "php -r \"require __DIR__.'/vendor/autoload.php'; file_put_contents(__DIR__.'/composer.json', str_replace('Project'.'Name', studly_case(basename(__DIR__)), file_get_contents(__DIR__.'/composer.json')));\""
+            "php artisan key:generate",
+            "php -r \"require __DIR__.'/vendor/autoload.php'; file_put_contents(__DIR__.'/composer.json', str_replace('Project'.'Name', studly_case(basename(__DIR__)), file_get_contents(__DIR__.'/composer.json')));\"",
+            "composer dump"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
