@@ -44,7 +44,7 @@ class UserRoutes implements Routes
 
         $router->group(['prefix' => "backoffice/$prefix", 'middleware' => ['web', 'security:backoffice']], function (Registrar $router) {
             $router->get('export',                    ['as' => static::EXPORT,  'uses' => UserController::class . '@export',  'permission' => static::PERMISSION_READ]);
-            $router->get('/',                         ['as' => static::INDEX,   'uses' => UserController::class . '@index',   'permission' => static::PERMISSION_READ, "middleware" => "persistent"]);
+            $router->get('/',                         ['as' => static::INDEX,   'uses' => UserController::class . '@index',   'permission' => static::PERMISSION_READ, 'middleware' => 'persistent']);
             $router->get('create',                    ['as' => static::CREATE,  'uses' => UserController::class . '@create',  'permission' => static::PERMISSION_CREATE]);
             $router->post('/',                        ['as' => static::STORE,   'uses' => UserController::class . '@store',   'permission' => static::PERMISSION_CREATE]);
             $router->get('{'.Bind::USERNAME.'}',      ['as' => static::SHOW,    'uses' => UserController::class . '@show',    'permission' => static::PERMISSION_READ]);

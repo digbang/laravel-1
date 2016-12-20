@@ -45,7 +45,7 @@ class RoleRoutes implements Routes
 
         $router->group(['prefix' => "backoffice/$prefix", 'middleware' => ['web', 'security:backoffice']], function () use ($router) {
             $router->get('export',                ['as' => static::EXPORT,  'uses' => RoleController::class . '@export',  'permission' => self::PERMISSION_READ]);
-            $router->get('/',                     ['as' => static::INDEX,   'uses' => RoleController::class . '@index',   'permission' => self::PERMISSION_READ, 'persistent' => true]);
+            $router->get('/',                     ['as' => static::INDEX,   'uses' => RoleController::class . '@index',   'permission' => self::PERMISSION_READ, 'middleware' => 'persistent']);
             $router->get('create',                ['as' => static::CREATE,  'uses' => RoleController::class . '@create',  'permission' => self::PERMISSION_CREATE]);
             $router->post('/',                    ['as' => static::STORE,   'uses' => RoleController::class . '@store',   'permission' => self::PERMISSION_CREATE]);
             $router->get('{'.Bind::SLUG.'}',      ['as' => static::SHOW,    'uses' => RoleController::class . '@show',    'permission' => self::PERMISSION_READ]);
