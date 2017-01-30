@@ -133,7 +133,7 @@ class UserController extends Controller
                 /** @var Activation $activation */
                 $activation = $this->security()->activations()->create($user);
 
-                $this->sendActivation($user,route(AuthRoutes::ACTIVATE, [$activation->getCode()]));
+                $this->sendActivation($user, route(AuthRoutes::ACTIVATE, ['backoffice_user_id' => $user->getUserId(), 'code' => $activation->getCode()]));
             }
 
             return $this->redirect()->to($this->url()->route(UserRoutes::SHOW, $user->getUsername()));
