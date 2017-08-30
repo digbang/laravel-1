@@ -45,7 +45,7 @@
     },
     "scripts": {
         "post-root-package-install": [
-            "sed -i \"s/project-name/${PWD##*/}/g\" .env.example docker-compose.yml sonar-project.properties",
+            "bash -c 'sed -i \"s/project-name/${PWD##*/}/g\" .env.example docker-compose.yml sonar-project.properties'",
             "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
