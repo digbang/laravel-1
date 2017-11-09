@@ -4,9 +4,9 @@ namespace App\Http\Backoffice\Handlers\Users;
 
 use App\Http\Backoffice\Handlers\Dashboard\DashboardIndexHandler;
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Kernel;
 use App\Http\Util\RouteDefiner;
-use App\Http\Backoffice\Permission;
 use Digbang\Backoffice\Support\PermissionParser;
 use Digbang\Security\Permissions\Permissible;
 use Digbang\Security\Roles\Role;
@@ -31,7 +31,7 @@ class UserEditHandler extends Handler implements RouteDefiner
         /** @var User $user */
         $user = security()->users()->findById($userId);
 
-        if(!$user) {
+        if (! $user) {
             abort(404);
         }
 
@@ -39,16 +39,15 @@ class UserEditHandler extends Handler implements RouteDefiner
             security()->url()->to(UserUpdateHandler::route($user->getUserId())),
             trans('backoffice::default.edit') . ' ' . trans('backoffice::auth.user_name', ['name' => $user->getName()->getFirstName(), 'lastname' => $user->getName()->getLastName()]),
             Request::METHOD_PUT,
-            security()->url()->to(UserListHandler::route())
-            [],
+            security()->url()->to(UserListHandler::route())[],
             $user
         );
 
         $data = [
             'firstName' => $user->getName()->getFirstName(),
-            'lastName'  => $user->getName()->getLastName(),
-            'email'     => $user->getEmail(),
-            'username'  => $user->getUsername(),
+            'lastName' => $user->getName()->getLastName(),
+            'email' => $user->getEmail(),
+            'username' => $user->getUsername(),
         ];
 
         /** @var User|Roleable|Permissible $user */
@@ -74,17 +73,17 @@ class UserEditHandler extends Handler implements RouteDefiner
 
         $breadcrumb = backoffice()->breadcrumb([
             trans('backoffice::default.home') => DashboardIndexHandler::class,
-            trans('backoffice::auth.users')   => UserListHandler::class,
+            trans('backoffice::auth.users') => UserListHandler::class,
             trans('backoffice::auth.user_name', [
-                'name'     => $user->getName()->getFirstName(),
+                'name' => $user->getName()->getFirstName(),
                 'lastname' => $user->getName()->getLastName(),
             ]) => UserShowHandler::route($user->getUserId()),
             trans('backoffice::default.edit'),
         ]);
 
         return $view->make('backoffice::edit', [
-            'title'      => trans('backoffice::auth.users'),
-            'form'       => $form,
+            'title' => trans('backoffice::auth.users'),
+            'form' => $form,
             'breadcrumb' => $breadcrumb,
         ]);
     }
@@ -117,11 +116,11 @@ class UserEditHandler extends Handler implements RouteDefiner
 
         $inputs = $form->inputs();
 
-        $inputs->text('firstName',                 trans('backoffice::auth.first_name'));
-        $inputs->text('lastName',                  trans('backoffice::auth.last_name'));
-        $inputs->text('email',                     trans('backoffice::auth.email'));
-        $inputs->text('username',                  trans('backoffice::auth.username'));
-        $inputs->password('password',              trans('backoffice::auth.password'));
+        $inputs->text('firstName', trans('backoffice::auth.first_name'));
+        $inputs->text('lastName', trans('backoffice::auth.last_name'));
+        $inputs->text('email', trans('backoffice::auth.email'));
+        $inputs->text('username', trans('backoffice::auth.username'));
+        $inputs->password('password', trans('backoffice::auth.password'));
         $inputs->password('password_confirmation', trans('backoffice::auth.confirm_password'));
 
         $roles = security()->roles()->findAll();
@@ -142,8 +141,8 @@ class UserEditHandler extends Handler implements RouteDefiner
             trans('backoffice::auth.roles'),
             $options,
             [
-                'multiple'         => 'multiple',
-                'class'            => 'user-groups form-control',
+                'multiple' => 'multiple',
+                'class' => 'user-groups form-control',
                 'data-permissions' => json_encode($rolePermissions),
             ]
         );
@@ -156,7 +155,7 @@ class UserEditHandler extends Handler implements RouteDefiner
             $this->permissionParser->toDropdownArray($permissions),
             [
                 'multiple' => 'multiple',
-                'class'    => 'multiselect',
+                'class' => 'multiselect',
             ]
         );
 

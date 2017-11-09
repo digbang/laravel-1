@@ -4,9 +4,9 @@ namespace App\Http\Backoffice\Handlers\Users;
 
 use App\Http\Backoffice\Handlers\Dashboard\DashboardIndexHandler;
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Kernel;
 use App\Http\Util\RouteDefiner;
-use App\Http\Backoffice\Permission;
 use Digbang\Backoffice\Support\PermissionParser;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -35,13 +35,13 @@ class UserCreateHandler extends Handler implements RouteDefiner
 
         $breadcrumb = backoffice()->breadcrumb([
             trans('backoffice::default.home') => DashboardIndexHandler::class,
-            trans('backoffice::auth.users')   => UserListHandler::class,
+            trans('backoffice::auth.users') => UserListHandler::class,
             $label,
         ]);
 
         return $view->make('backoffice::create', [
-            'title'      => trans('backoffice::auth.users'),
-            'form'       => $form,
+            'title' => trans('backoffice::auth.users'),
+            'form' => $form,
             'breadcrumb' => $breadcrumb,
         ]);
     }
@@ -74,11 +74,11 @@ class UserCreateHandler extends Handler implements RouteDefiner
 
         $inputs = $form->inputs();
 
-        $inputs->text('firstName',                 trans('backoffice::auth.first_name'));
-        $inputs->text('lastName',                  trans('backoffice::auth.last_name'));
-        $inputs->text('email',                     trans('backoffice::auth.email'));
-        $inputs->text('username',                  trans('backoffice::auth.username'));
-        $inputs->password('password',              trans('backoffice::auth.password'));
+        $inputs->text('firstName', trans('backoffice::auth.first_name'));
+        $inputs->text('lastName', trans('backoffice::auth.last_name'));
+        $inputs->text('email', trans('backoffice::auth.email'));
+        $inputs->text('username', trans('backoffice::auth.username'));
+        $inputs->password('password', trans('backoffice::auth.password'));
         $inputs->password('password_confirmation', trans('backoffice::auth.confirm_password'));
         $inputs->checkbox('activated', trans('backoffice::auth.activated'));
 
@@ -100,8 +100,8 @@ class UserCreateHandler extends Handler implements RouteDefiner
             trans('backoffice::auth.roles'),
             $options,
             [
-                'multiple'         => 'multiple',
-                'class'            => 'user-groups form-control',
+                'multiple' => 'multiple',
+                'class' => 'user-groups form-control',
                 'data-permissions' => json_encode($rolePermissions),
             ]
         );
@@ -114,7 +114,7 @@ class UserCreateHandler extends Handler implements RouteDefiner
             $this->permissionParser->toDropdownArray($permissions),
             [
                 'multiple' => 'multiple',
-                'class'    => 'multiselect',
+                'class' => 'multiselect',
             ]
         );
 

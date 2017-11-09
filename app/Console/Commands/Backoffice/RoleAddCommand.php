@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console\Commands\Backoffice;
 
 use Digbang\Security\SecurityContext;

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Backoffice\Requests\Roles;
 
 use App\Http\Backoffice\Requests\Request;
@@ -17,7 +18,7 @@ class RoleStoreRequest extends Request
     {
         return [
             'name.required' => trans('backoffice::auth.validation.role.name'),
-            'name.unique'   => trans('backoffice::auth.validation.role.unique'),
+            'name.unique' => trans('backoffice::auth.validation.role.unique'),
         ];
     }
 }

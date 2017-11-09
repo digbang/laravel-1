@@ -3,12 +3,12 @@
 namespace App\Http\Backoffice\Handlers\Users;
 
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Kernel;
 use App\Http\Util\PaginationRequest;
 use App\Http\Util\RouteDefiner;
 use App\Infrastructure\Util\DataExporter;
 use App\Infrastructure\Util\PaginationData;
-use App\Http\Backoffice\Permission;
 use Digbang\Security\Users\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
@@ -22,7 +22,6 @@ class UserExportHandler extends Handler implements RouteDefiner
     {
         $items = new Collection($this->getData($request));
         $items = $items->map(function (User $user) {
-
             return [
                 trans('backoffice::auth.first_name') => $user->getName()->getFirstName(),
                 trans('backoffice::auth.last_name') => $user->getName()->getLastName(),
@@ -108,16 +107,16 @@ class UserExportHandler extends Handler implements RouteDefiner
     {
         $sortings = [
             'firstName' => 'u.name.firstName',
-            'lastName'  => 'u.name.lastName',
+            'lastName' => 'u.name.lastName',
             'lastLogin' => 'u.lastLogin',
-            'email'     => 'u.email.address',
-            'username'  => 'u.username',
+            'email' => 'u.email.address',
+            'username' => 'u.username',
         ];
 
         $selectedSorts = $paginationData->getSorting();
 
         $orderBy = [];
-        foreach($selectedSorts as $key => $sense) {
+        foreach ($selectedSorts as $key => $sense) {
             $key = $sortings[$key];
             $orderBy[$key] = $sense;
         }

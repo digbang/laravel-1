@@ -44,12 +44,10 @@ class AuthAuthenticateHandler extends Handler implements RouteDefiner
             $errors->add('password', trans('backoffice::auth.validation.password.wrong'));
 
             return $redirector->to(AuthLoginHandler::route())->withInput()->withErrors($errors);
-
         } catch (ThrottlingException $e) {
             return $view->make('backoffice::auth.throttling', [
                 'message' => trans('backoffice::auth.throttling.' . $e->getType(), ['remaining' => (new Chronos())->diffInSeconds($e->getFree())]),
             ]);
-
         } catch (NotActivatedException $e) {
             return $view->make('backoffice::auth.not-activated');
         }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console\Commands\Backoffice;
 
 use Digbang\Security\Contracts\SecurityApi;
@@ -38,18 +39,17 @@ class UserPermissionAddCommand extends AddPermissionCommand
      * @param object|null $user
      * @param string      $message
      *
-     * @return void
      * @throws \OutOfBoundsException
      * @throws \Doctrine\ORM\EntityNotFoundException
      */
     protected function assertUser($user, $message)
     {
-        if (!$user) {
+        if (! $user) {
             throw new EntityNotFoundException($message, 1);
         }
 
-        if (!$user instanceof Permissible) {
-            throw new \OutOfBoundsException('The configured User class needs to extend '.Permissible::class.' to use permissions.', 2);
+        if (! $user instanceof Permissible) {
+            throw new \OutOfBoundsException('The configured User class needs to extend ' . Permissible::class . ' to use permissions.', 2);
         }
     }
 }

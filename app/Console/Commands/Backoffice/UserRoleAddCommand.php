@@ -71,19 +71,18 @@ class UserRoleAddCommand extends Command
      * @param User|null $user
      * @param string $message
      *
-     * @return void
      * @throws \OutOfBoundsException
      * @throws \Doctrine\ORM\EntityNotFoundException
      */
     protected function assertUser($user, $message = 'User does not exist.')
     {
-        if (!$user) {
+        if (! $user) {
             throw new EntityNotFoundException($message, 1);
         }
 
-        if (!$user instanceof Roleable) {
+        if (! $user instanceof Roleable) {
             throw new \OutOfBoundsException(
-                'The configured User class needs to extend '.Roleable::class.' to use roles.',
+                'The configured User class needs to extend ' . Roleable::class . ' to use roles.',
                 2
             );
         }
@@ -93,12 +92,11 @@ class UserRoleAddCommand extends Command
      * @param Role|null $role
      * @param string $message
      *
-     * @return void
      * @throws \Doctrine\ORM\EntityNotFoundException
      */
     protected function assertRoleExists($role, $message)
     {
-        if (!$role) {
+        if (! $role) {
             throw new EntityNotFoundException($message, 3);
         }
     }
