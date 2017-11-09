@@ -6,6 +6,12 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {
+    public const API = 'api';
+    public const WEB = 'web';
+    public const BACKOFFICE = 'security:backoffice';
+    public const BACKOFFICE_PUBLIC = 'security:backoffice:public';
+    public const BACKOFFICE_PERSISTENT_LISTING = 'persistent';
+
     /**
      * The application's global HTTP middleware stack.
      *
@@ -18,7 +24,6 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\TrustProxies::class,
     ];
 
     /**
