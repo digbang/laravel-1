@@ -7,14 +7,13 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Implementation bindings.
      *
-     * @return void
+     * @var string[]
      */
-    public function register()
-    {
+    private $bindings = [
         //
-    }
+    ];
 
     /**
      * Bootstrap any application services.
@@ -24,5 +23,23 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+    }
+
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        foreach ($this->bindings as $abstract => $concrete) {
+            $this->app->bind($abstract, $concrete);
+        }
+
+        if (config('app.debug')) {
+            $this->app->register(\Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class);
+            $this->app->register(\PrettyRoutes\ServiceProvider::class);
+            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+        }
     }
 }
