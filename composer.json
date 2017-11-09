@@ -17,7 +17,6 @@
         "digbang/doctrine-extensions": "^1.0",
         "digbang/backoffice": "^6.1",
         "laravelcollective/html": "^5.5",
-        "beberlei/assert": "^2.6",
         "cakephp/chronos": "^1.1"
     },
     "require-dev": {
@@ -28,7 +27,7 @@
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
         "phpunit/phpunit": "^7.0",
-        "friendsofphp/php-cs-fixer": "^1.12",
+        "friendsofphp/php-cs-fixer": "^2.7",
         "roave/security-advisories": "dev-master",
         "garygreen/pretty-routes": "^0.0.8",
         "rap2hpoutre/laravel-log-viewer": "^0.10.4",
@@ -36,11 +35,12 @@
         "symfony/thanks": "^1.0"
     },
     "suggest": {
-        "intervention/image":        "PHP image handling and manipulation library.",
+        "intervention/image": "PHP image handling and manipulation library.",
         "cviebrock/image-validator": "Extra Laravel validation rules for dealing with images.",
-        "dingo/api":                 "API development.",
-        "omnipay/omnipay":           "Payment gateway abstraction.",
-        "moneyphp/money":            "Work with money safer, easier, and fun!"
+        "dingo/api": "API development.",
+        "omnipay/omnipay": "Payment gateway abstraction.",
+        "moneyphp/money": "Work with money safer, easier, and fun!",
+        "beberlei/assert": "^2.6"
     },
     "autoload": {
         "psr-4": {

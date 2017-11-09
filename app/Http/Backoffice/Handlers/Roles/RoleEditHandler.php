@@ -4,9 +4,9 @@ namespace App\Http\Backoffice\Handlers\Roles;
 
 use App\Http\Backoffice\Handlers\Dashboard\DashboardIndexHandler;
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Kernel;
 use App\Http\Util\RouteDefiner;
-use App\Http\Backoffice\Permission;
 use Digbang\Backoffice\Support\PermissionParser;
 use Digbang\Security\Roles\Role;
 use Illuminate\Contracts\View\Factory;
@@ -28,7 +28,7 @@ class RoleEditHandler extends Handler implements RouteDefiner
         /** @var Role $role */
         $role = security()->roles()->findById($roleId);
 
-        if(!$role) {
+        if (! $role) {
             abort(404);
         }
 
@@ -44,20 +44,20 @@ class RoleEditHandler extends Handler implements RouteDefiner
         })->toArray();
 
         $form->fill([
-            'name'          => $role->getName(),
+            'name' => $role->getName(),
             'permissions[]' => $permissions,
         ]);
 
         $breadcrumb = backoffice()->breadcrumb([
             trans('backoffice::default.home') => DashboardIndexHandler::class,
-            trans('backoffice::auth.roles')   => RoleListHandler::class,
-            $role->getName()                  => RoleShowHandler::route($role->getRoleId()),
+            trans('backoffice::auth.roles') => RoleListHandler::class,
+            $role->getName() => RoleShowHandler::route($role->getRoleId()),
             trans('backoffice::default.edit'),
         ]);
 
         return $view->make('backoffice::edit', [
-            'title'      => trans('backoffice::auth.roles'),
-            'form'       => $form,
+            'title' => trans('backoffice::auth.roles'),
+            'form' => $form,
             'breadcrumb' => $breadcrumb,
         ]);
     }

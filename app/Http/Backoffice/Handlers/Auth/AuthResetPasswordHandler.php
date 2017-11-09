@@ -21,8 +21,7 @@ class AuthResetPasswordHandler extends Handler implements RouteDefiner
         SecurityApi $securityApi,
         Redirector $redirector,
         Factory $view
-    )
-    {
+    ) {
         /** @var User $user */
         $user = $securityApi->users()->findById($userId) ?: abort(404);
 

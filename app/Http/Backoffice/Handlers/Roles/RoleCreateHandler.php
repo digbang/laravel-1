@@ -4,9 +4,9 @@ namespace App\Http\Backoffice\Handlers\Roles;
 
 use App\Http\Backoffice\Handlers\Dashboard\DashboardIndexHandler;
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Kernel;
 use App\Http\Util\RouteDefiner;
-use App\Http\Backoffice\Permission;
 use Digbang\Backoffice\Support\PermissionParser;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -40,8 +40,8 @@ class RoleCreateHandler extends Handler implements RouteDefiner
         ]);
 
         return $view->make('backoffice::create', [
-            'title'      => trans('backoffice::auth.roles'),
-            'form'       => $form,
+            'title' => trans('backoffice::auth.roles'),
+            'form' => $form,
             'breadcrumb' => $breadcrumb,
         ]);
     }

@@ -4,9 +4,9 @@ namespace App\Http\Backoffice\Handlers\Roles;
 
 use App\Http\Backoffice\Handlers\Dashboard\DashboardIndexHandler;
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Kernel;
 use App\Http\Util\RouteDefiner;
-use App\Http\Backoffice\Permission;
 use Digbang\Backoffice\Support\PermissionParser;
 use Digbang\Security\Exceptions\SecurityException;
 use Digbang\Security\Roles\Role;
@@ -28,7 +28,7 @@ class RoleShowHandler extends Handler implements RouteDefiner
         /** @var Role $role */
         $role = security()->roles()->findById($roleId);
 
-        if(!$role) {
+        if (! $role) {
             abort(404);
         }
 
@@ -39,7 +39,7 @@ class RoleShowHandler extends Handler implements RouteDefiner
         ]);
 
         $data = [
-            trans('backoffice::auth.name')        => $role->getName(),
+            trans('backoffice::auth.name') => $role->getName(),
             trans('backoffice::auth.permissions') => $this->permissionParser->toViewTable(
                 security()->permissions()->all(),
                 $role
@@ -77,11 +77,11 @@ class RoleShowHandler extends Handler implements RouteDefiner
         }
 
         return $view->make('backoffice::show', [
-            'title'      => trans('backoffice::auth.roles'),
+            'title' => trans('backoffice::auth.roles'),
             'breadcrumb' => $breadcrumb,
-            'label'      => $role->getName(),
-            'data'       => $data,
-            'actions'    => $actions,
+            'label' => $role->getName(),
+            'data' => $data,
+            'actions' => $actions,
             'topActions' => $topActions,
         ]);
     }

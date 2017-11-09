@@ -2,9 +2,9 @@
 
 namespace App\Http\Backoffice\Handlers\Auth;
 
+use App\Http\Backoffice\Handlers\Handler;
 use App\Http\Backoffice\Handlers\SendsEmails;
 use App\Http\Backoffice\Requests\Auth\ResendActivationRequest;
-use App\Http\Backoffice\Handlers\Handler;
 use App\Http\Kernel;
 use App\Http\Util\RouteDefiner;
 use Digbang\Security\Activations\Activation;
@@ -23,8 +23,7 @@ class AuthResendActivationRequestHandler extends Handler implements RouteDefiner
         ResendActivationRequest $request,
         SecurityApi $securityApi,
         Redirector $redirector
-    )
-    {
+    ) {
         $email = $request->input('email');
 
         /** @var User $user */

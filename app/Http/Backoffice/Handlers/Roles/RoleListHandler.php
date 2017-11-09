@@ -4,6 +4,7 @@ namespace App\Http\Backoffice\Handlers\Roles;
 
 use App\Http\Backoffice\Handlers\Dashboard\DashboardIndexHandler;
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Kernel;
 use App\Http\Util\PaginationRequest;
 use App\Http\Util\RouteDefiner;
@@ -16,7 +17,6 @@ use Digbang\Security\Users\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
-use App\Http\Backoffice\Permission;
 use Illuminate\Support\Collection;
 
 class RoleListHandler extends Handler implements RouteDefiner
@@ -46,8 +46,8 @@ class RoleListHandler extends Handler implements RouteDefiner
         ]);
 
         return $view->make('backoffice::index', [
-            'title'      => trans('backoffice::auth.roles'),
-            'list'       => $list,
+            'title' => trans('backoffice::auth.roles'),
+            'list' => $list,
             'breadcrumb' => $breadcrumb,
         ]);
     }
@@ -78,7 +78,7 @@ class RoleListHandler extends Handler implements RouteDefiner
     private function getListing()
     {
         $listing = backoffice()->listing([
-            'name'  => trans('backoffice::auth.name'),
+            'name' => trans('backoffice::auth.name'),
             'users' => trans('backoffice::auth.users'),
             'id', 'slug',
         ]);
@@ -159,9 +159,9 @@ class RoleListHandler extends Handler implements RouteDefiner
                 return false;
             }
         }, fa('eye'), [
-            'data-toggle'    => 'tooltip',
+            'data-toggle' => 'tooltip',
             'data-placement' => 'top',
-            'title'          => trans('backoffice::default.show'),
+            'title' => trans('backoffice::default.show'),
         ]);
 
         $rowActions->link(function (Collection $row) {
@@ -171,9 +171,9 @@ class RoleListHandler extends Handler implements RouteDefiner
                 return false;
             }
         }, fa('edit'), [
-            'data-toggle'    => 'tooltip',
+            'data-toggle' => 'tooltip',
             'data-placement' => 'top',
-            'title'          => trans('backoffice::default.edit'),
+            'title' => trans('backoffice::default.edit'),
         ]);
 
         $rowActions->form(
@@ -187,11 +187,11 @@ class RoleListHandler extends Handler implements RouteDefiner
             fa('times'),
             Request::METHOD_DELETE,
             [
-                'class'          => 'text-danger',
-                'data-toggle'    => 'tooltip',
+                'class' => 'text-danger',
+                'data-toggle' => 'tooltip',
                 'data-placement' => 'top',
-                'data-confirm'   => trans('backoffice::default.delete-confirm'),
-                'title'          => trans('backoffice::default.delete'),
+                'data-confirm' => trans('backoffice::default.delete-confirm'),
+                'title' => trans('backoffice::default.delete'),
             ]
         );
 
@@ -230,13 +230,13 @@ class RoleListHandler extends Handler implements RouteDefiner
     private function convertSorting(PaginationData $paginationData): array
     {
         $sortings = [
-            'name' => 'r.name'
+            'name' => 'r.name',
         ];
 
         $selectedSorts = $paginationData->getSorting();
 
         $orderBy = [];
-        foreach($selectedSorts as $key => $sense) {
+        foreach ($selectedSorts as $key => $sense) {
             $key = $sortings[$key];
             $orderBy[$key] = $sense;
         }

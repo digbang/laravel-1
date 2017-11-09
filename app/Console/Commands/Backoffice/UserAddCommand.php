@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console\Commands\Backoffice;
 
 use Digbang\Security\SecurityContext;
@@ -24,8 +25,6 @@ class UserAddCommand extends Command
      * Execute the console command.
      *
      * @param SecurityContext $securityContext
-     *
-     * @return void
      */
     public function handle(SecurityContext $securityContext)
     {
@@ -33,7 +32,7 @@ class UserAddCommand extends Command
 
         $security->registerAndActivate([
             'username' => $this->argument('username'),
-            'email'    => $this->argument('email'),
+            'email' => $this->argument('email'),
             'password' => $this->secret('Insert password: '),
             'firstName' => $this->ask('Insert First Name: '),
             'lastName' => $this->ask('Insert Last Name: '),

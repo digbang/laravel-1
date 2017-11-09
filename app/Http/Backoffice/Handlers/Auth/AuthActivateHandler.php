@@ -21,8 +21,7 @@ class AuthActivateHandler extends Handler implements RouteDefiner
         Repository $config,
         Redirector $redirector,
         Factory $view
-    )
-    {
+    ) {
         $activations = $securityApi->activations();
 
         /** @var User $user */
