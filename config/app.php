@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -137,7 +136,6 @@ return [
     */
 
     'providers' => [
-
         /*
          * Laravel Framework Service Providers...
          */
@@ -242,5 +240,4 @@ return [
          */
         'DatabaseSeeder' => App\Infrastructure\Seeders\DatabaseSeeder::class,
     ],
-
 ];
