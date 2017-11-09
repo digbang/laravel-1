@@ -4,6 +4,7 @@ namespace App\Http\Backoffice\Handlers\Users;
 
 use App\Http\Backoffice\Handlers\Dashboard\DashboardIndexHandler;
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Kernel;
 use App\Http\Util\PaginationRequest;
 use App\Http\Util\RouteDefiner;
@@ -15,7 +16,6 @@ use Digbang\Security\Users\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
-use App\Http\Backoffice\Permission;
 use Illuminate\Support\Collection;
 
 class UserListHandler extends Handler implements RouteDefiner
@@ -37,8 +37,8 @@ class UserListHandler extends Handler implements RouteDefiner
         ]);
 
         return $view->make('backoffice::index', [
-            'title'      => trans('backoffice::auth.users'),
-            'list'       => $list,
+            'title' => trans('backoffice::auth.users'),
+            'list' => $list,
             'breadcrumb' => $breadcrumb,
         ]);
     }
@@ -70,17 +70,17 @@ class UserListHandler extends Handler implements RouteDefiner
     {
         $listing = backoffice()->listing([
             'firstName' => trans('backoffice::auth.first_name'),
-            'lastName'  => trans('backoffice::auth.last_name'),
-            'email'     => trans('backoffice::auth.email'),
-            'username'  => trans('backoffice::auth.username'),
+            'lastName' => trans('backoffice::auth.last_name'),
+            'email' => trans('backoffice::auth.email'),
+            'username' => trans('backoffice::auth.username'),
             'activated' => trans('backoffice::auth.activated'),
             'lastLogin' => trans('backoffice::auth.last_login'),
             'user_id', 'name', 'id',
         ]);
 
         $listing->columns()
-            ->hide(['id', 'user_id', 'name',])
-            ->sortable(['firstName', 'lastName', 'lastLogin', 'email', 'username',]);
+            ->hide(['id', 'user_id', 'name'])
+            ->sortable(['firstName', 'lastName', 'lastLogin', 'email', 'username']);
 
         $listing->addValueExtractor('firstName', function (User $user) {
             return $user->getName()->getFirstName();
@@ -105,11 +105,11 @@ class UserListHandler extends Handler implements RouteDefiner
     {
         $filters = $list->filters();
 
-        $filters->text('email',        trans('backoffice::auth.email'),      ['class' => 'form-control']);
-        $filters->text('username',     trans('backoffice::auth.username'),   ['class' => 'form-control']);
-        $filters->text('firstName',    trans('backoffice::auth.first_name'), ['class' => 'form-control']);
-        $filters->text('lastName',     trans('backoffice::auth.last_name'),  ['class' => 'form-control']);
-        $filters->boolean('activated', trans('backoffice::auth.activated'),  ['class' => 'form-control']);
+        $filters->text('email', trans('backoffice::auth.email'), ['class' => 'form-control']);
+        $filters->text('username', trans('backoffice::auth.username'), ['class' => 'form-control']);
+        $filters->text('firstName', trans('backoffice::auth.first_name'), ['class' => 'form-control']);
+        $filters->text('lastName', trans('backoffice::auth.last_name'), ['class' => 'form-control']);
+        $filters->boolean('activated', trans('backoffice::auth.activated'), ['class' => 'form-control']);
     }
 
     private function buildListActions(Listing $list, Request $request)
@@ -121,7 +121,7 @@ class UserListHandler extends Handler implements RouteDefiner
                 url()->to(UserCreateHandler::route()),
                 fa('plus') . ' ' . trans('backoffice::default.new', ['model' => trans('backoffice::auth.user')]),
                 [
-                    'class' => 'btn btn-primary'
+                    'class' => 'btn btn-primary',
                 ]
             );
         } catch (SecurityException $e) { /* Do nothing */
@@ -131,7 +131,7 @@ class UserListHandler extends Handler implements RouteDefiner
                 url()->to(UserExportHandler::route($request->all())),
                 fa('file-excel-o') . ' ' . trans('backoffice::default.export'),
                 [
-                    'class' => 'btn btn-success'
+                    'class' => 'btn btn-success',
                 ]
             );
         } catch (SecurityException $e) { /* Do nothing */
@@ -153,7 +153,7 @@ class UserListHandler extends Handler implements RouteDefiner
             [
                 'data-toggle' => 'tooltip',
                 'data-placement' => 'top',
-                'title' => trans('backoffice::default.show')
+                'title' => trans('backoffice::default.show'),
             ]
         );
 
@@ -170,7 +170,7 @@ class UserListHandler extends Handler implements RouteDefiner
                 'class' => 'text-success',
                 'data-toggle' => 'tooltip',
                 'data-placement' => 'top',
-                'title' => trans('backoffice::default.edit')
+                'title' => trans('backoffice::default.edit'),
             ]
         );
 
@@ -185,11 +185,11 @@ class UserListHandler extends Handler implements RouteDefiner
             fa('times'),
             Request::METHOD_DELETE,
             [
-                'class'          => 'text-danger',
-                'data-toggle'    => 'tooltip',
+                'class' => 'text-danger',
+                'data-toggle' => 'tooltip',
                 'data-placement' => 'top',
-                'data-confirm'   => trans('backoffice::default.delete-confirm'),
-                'title'          => trans('backoffice::default.delete'),
+                'data-confirm' => trans('backoffice::default.delete-confirm'),
+                'title' => trans('backoffice::default.delete'),
             ]
         );
 
@@ -204,11 +204,11 @@ class UserListHandler extends Handler implements RouteDefiner
             fa('unlock-alt'),
             Request::METHOD_POST,
             [
-                'class'          => 'text-warning',
-                'data-toggle'    => 'tooltip',
+                'class' => 'text-warning',
+                'data-toggle' => 'tooltip',
                 'data-placement' => 'top',
-                'data-confirm'   => trans('backoffice::auth.reset-password.confirm'),
-                'title'          => trans('backoffice::auth.reset-password.title'),
+                'data-confirm' => trans('backoffice::auth.reset-password.confirm'),
+                'title' => trans('backoffice::auth.reset-password.title'),
             ]
         );
 
@@ -227,11 +227,11 @@ class UserListHandler extends Handler implements RouteDefiner
             fa('reply-all'),
             Request::METHOD_POST,
             [
-                'class'          => 'text-primary',
-                'data-toggle'    => 'tooltip',
+                'class' => 'text-primary',
+                'data-toggle' => 'tooltip',
                 'data-placement' => 'top',
-                'data-confirm'   => trans('backoffice::auth.activation.confirm'),
-                'title'          => trans('backoffice::auth.activation.title'),
+                'data-confirm' => trans('backoffice::auth.activation.confirm'),
+                'title' => trans('backoffice::auth.activation.title'),
             ]
         );
 
@@ -282,16 +282,16 @@ class UserListHandler extends Handler implements RouteDefiner
     {
         $sortings = [
             'firstName' => 'u.name.firstName',
-            'lastName'  => 'u.name.lastName',
+            'lastName' => 'u.name.lastName',
             'lastLogin' => 'u.lastLogin',
-            'email'     => 'u.email.address',
-            'username'  => 'u.username',
+            'email' => 'u.email.address',
+            'username' => 'u.username',
         ];
 
         $selectedSorts = $paginationData->getSorting();
 
         $orderBy = [];
-        foreach($selectedSorts as $key => $sense) {
+        foreach ($selectedSorts as $key => $sense) {
             $key = $sortings[$key];
             $orderBy[$key] = $sense;
         }

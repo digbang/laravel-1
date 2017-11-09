@@ -13,7 +13,7 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         $rules = $this->defaultRules();
-        $rules['password'] = 'required|'.$rules['password'];
+        $rules['password'] = 'required|' . $rules['password'];
 
         return $rules;
     }

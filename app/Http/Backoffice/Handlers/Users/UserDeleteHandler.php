@@ -4,9 +4,9 @@ namespace App\Http\Backoffice\Handlers\Users;
 
 use App\Http\Backoffice\Handlers\Dashboard\DashboardIndexHandler;
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Kernel;
 use App\Http\Util\RouteDefiner;
-use App\Http\Backoffice\Permission;
 use Digbang\Backoffice\Exceptions\ValidationException;
 use Digbang\Security\Exceptions\SecurityException;
 use Digbang\Security\Users\User;
@@ -19,7 +19,7 @@ class UserDeleteHandler extends Handler implements RouteDefiner
         /** @var User $user */
         $user = security()->users()->findById($userId);
 
-        if(!$user) {
+        if (! $user) {
             abort(404);
         }
 

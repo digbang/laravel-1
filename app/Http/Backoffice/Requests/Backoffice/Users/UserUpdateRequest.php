@@ -22,7 +22,7 @@ class UserUpdateRequest extends FormRequest
 
         $userId = $this->route(UserUpdateHandler::ROUTE_PARAM_ID);
 
-        $rules['email']    .= ',' . $userId;
+        $rules['email'] .= ',' . $userId;
         $rules['username'] .= ',' . $userId;
         $rules['password'] = 'nullable|' . $rules['password'];
 

@@ -4,9 +4,9 @@ namespace App\Http\Backoffice\Handlers\Roles;
 
 use App\Http\Backoffice\Handlers\Dashboard\DashboardIndexHandler;
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Kernel;
 use App\Http\Util\RouteDefiner;
-use App\Http\Backoffice\Permission;
 use Digbang\Backoffice\Exceptions\ValidationException;
 use Digbang\Security\Exceptions\SecurityException;
 use Digbang\Security\Roles\Role;
@@ -19,7 +19,7 @@ class RoleDeleteHandler extends Handler implements RouteDefiner
         /** @var Role $role */
         $role = security()->roles()->findById($roleId);
 
-        if(!$role) {
+        if (! $role) {
             abort(404);
         }
 
@@ -30,9 +30,8 @@ class RoleDeleteHandler extends Handler implements RouteDefiner
                 ->to(security()->url()->to(RoleListHandler::route()))
                 ->withSuccess(trans('backoffice::default.delete_msg', [
                     'model' => trans('backoffice::auth.role'),
-                    'id' => $role->getName()
+                    'id' => $role->getName(),
                 ]));
-
         } catch (ValidationException $e) {
             return redirect()->back()->withDanger(implode('<br/>', $e->getErrors()));
         } catch (SecurityException $e) {

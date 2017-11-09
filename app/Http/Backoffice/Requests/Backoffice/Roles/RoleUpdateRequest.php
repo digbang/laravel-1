@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Backoffice\Requests\Auth;
 
 use App\Http\Backoffice\Handlers\Roles\RoleUpdateHandler;
@@ -18,7 +19,7 @@ class RoleUpdateRequest extends Request
     {
         return [
             'name.required' => trans('backoffice::auth.validation.role.name'),
-            'name.unique'   => trans('backoffice::auth.validation.role.unique'),
+            'name.unique' => trans('backoffice::auth.validation.role.unique'),
         ];
     }
 }

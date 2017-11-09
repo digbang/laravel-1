@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Backoffice\Requests\Auth;
 
 use App\Http\Backoffice\Requests\Request;
