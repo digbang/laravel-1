@@ -12,23 +12,17 @@ class AppServiceProvider extends ServiceProvider
      * @var string[]
      */
     private $bindings = [
-        //
     ];
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
     public function boot()
     {
-        //
     }
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register()
     {
