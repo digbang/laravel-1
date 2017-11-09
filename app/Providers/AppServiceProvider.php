@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Infrastructure\Doctrine\Repositories as Doctrine;
 use Illuminate\Support\ServiceProvider;
+use ProjectName\Repositories;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,6 +14,10 @@ class AppServiceProvider extends ServiceProvider
      * @var string[]
      */
     private $bindings = [
+        //Generic Repositories
+        Repositories\PersistRepository::class => Doctrine\DoctrinePersistRepository::class,
+
+        //Read Repositories
     ];
 
     /**
