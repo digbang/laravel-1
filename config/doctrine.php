@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Entity Mangers
@@ -20,21 +19,20 @@ return [
     | --> Warning: Proxy auto generation should only be enabled in dev!
     |
     */
-    'managers'                   => [
+    'managers' => [
         'default' => [
-            'dev'           => env('APP_DEBUG'),
-            'meta'          => 'fluent',
-            'connection'    => env('DB_CONNECTION', 'mysql'),
-            'namespaces'    => [],
-            'paths'         => [],
-            'repository'    => Doctrine\ORM\EntityRepository::class,
-            'proxies'       => [
-                'namespace'     => false,
-                'path'          => base_path('proxies'),
-                'auto_generate' => env('DOCTRINE_PROXY_AUTOGENERATE', false)
+            'dev' => env('APP_DEBUG'),
+            'meta' => 'fluent',
+            'connection' => env('DB_CONNECTION', 'mysql'),
+            'namespaces' => [],
+            'paths' => [],
+            'repository' => Doctrine\ORM\EntityRepository::class,
+            'proxies' => [
+                'namespace' => false,
+                'path' => base_path('proxies'),
+                'auto_generate' => env('DOCTRINE_PROXY_AUTOGENERATE', false),
             ],
             'mappings' => [
-                //
             ],
             /*
             |--------------------------------------------------------------------------
@@ -45,11 +43,11 @@ return [
             | e.g. Doctrine\ORM\Events::onFlush
             |
             */
-            'events'        => [
-                'listeners'   => [],
-                'subscribers' => []
+            'events' => [
+                'listeners' => [],
+                'subscribers' => [],
             ],
-            'filters'       => [],
+            'filters' => [],
             /*
             |--------------------------------------------------------------------------
             | Doctrine mapping types
@@ -74,8 +72,8 @@ return [
             */
             'mapping_types' => [
                 //'enum' => 'string'
-            ]
-        ]
+            ],
+        ],
     ],
     /*
     |--------------------------------------------------------------------------
@@ -88,7 +86,7 @@ return [
     | laravel-doctrine/extensions in your composer.json
     |
     */
-    'extensions'                 => [
+    'extensions' => [
         //LaravelDoctrine\ORM\Extensions\TablePrefix\TablePrefixExtension::class,
         //LaravelDoctrine\Extensions\Timestamps\TimestampableExtension::class,
         //LaravelDoctrine\Extensions\SoftDeletes\SoftDeleteableExtension::class,
@@ -108,31 +106,31 @@ return [
     | Create a custom or override a Doctrine Type
     |--------------------------------------------------------------------------
     */
-    'custom_types'               => [
-        'json'                                                          => LaravelDoctrine\ORM\Types\Json::class,
-        DoctrineExtensions\Types\CarbonDateType::CARBONDATE             => DoctrineExtensions\Types\CarbonDateType::class,
-        DoctrineExtensions\Types\CarbonDateTimeType::CARBONDATETIME     => DoctrineExtensions\Types\CarbonDateTimeType::class,
+    'custom_types' => [
+        'json' => LaravelDoctrine\ORM\Types\Json::class,
+        DoctrineExtensions\Types\CarbonDateType::CARBONDATE => DoctrineExtensions\Types\CarbonDateType::class,
+        DoctrineExtensions\Types\CarbonDateTimeType::CARBONDATETIME => DoctrineExtensions\Types\CarbonDateTimeType::class,
         DoctrineExtensions\Types\CarbonDateTimeTzType::CARBONDATETIMETZ => DoctrineExtensions\Types\CarbonDateTimeTzType::class,
-        DoctrineExtensions\Types\CarbonTimeType::CARBONTIME             => DoctrineExtensions\Types\CarbonTimeType::class,
+        DoctrineExtensions\Types\CarbonTimeType::CARBONTIME => DoctrineExtensions\Types\CarbonTimeType::class,
     ],
     /*
     |--------------------------------------------------------------------------
     | DQL custom datetime functions
     |--------------------------------------------------------------------------
     */
-    'custom_datetime_functions'  => [],
+    'custom_datetime_functions' => [],
     /*
     |--------------------------------------------------------------------------
     | DQL custom numeric functions
     |--------------------------------------------------------------------------
     */
-    'custom_numeric_functions'   => [],
+    'custom_numeric_functions' => [],
     /*
     |--------------------------------------------------------------------------
     | DQL custom string functions
     |--------------------------------------------------------------------------
     */
-    'custom_string_functions'    => [
+    'custom_string_functions' => [
         Digbang\DoctrineExtensions\Functions\UnaccentFunction::UNACCENT => Digbang\DoctrineExtensions\Functions\UnaccentFunction::class,
     ],
     /*
@@ -147,7 +145,7 @@ return [
     | - LaravelDoctrine\ORM\Loggers\FileLogger
     |--------------------------------------------------------------------------
     */
-    'logger'                     => env('DOCTRINE_LOGGER', false),
+    'logger' => env('DOCTRINE_LOGGER', false),
     /*
     |--------------------------------------------------------------------------
     | Cache
@@ -159,9 +157,9 @@ return [
     | Available: apc|array|file|memcached|redis|void
     |
     */
-    'cache'                      => [
-        'default'      => env('DOCTRINE_CACHE', 'array'),
-        'namespace'    => null,
+    'cache' => [
+        'default' => env('DOCTRINE_CACHE', 'array'),
+        'namespace' => null,
         'second_level' => false,
     ],
     /*
@@ -174,8 +172,8 @@ return [
     | laravel-doctrine/extensions in your composer.json
     |
     */
-    'gedmo'                      => [
-        'all_mappings' => false
+    'gedmo' => [
+        'all_mappings' => false,
     ],
     /*
      |--------------------------------------------------------------------------
@@ -195,7 +193,7 @@ return [
      |  Doctrine notifications channel
      |
      */
-    'notifications'              => [
-        'channel' => 'database'
-    ]
+    'notifications' => [
+        'channel' => 'database',
+    ],
 ];
