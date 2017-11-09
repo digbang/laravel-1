@@ -6,10 +6,10 @@ use App\Http\Backoffice\Handlers\Auth\AuthActivateHandler;
 use App\Http\Backoffice\Handlers\Dashboard\DashboardIndexHandler;
 use App\Http\Backoffice\Handlers\Handler;
 use App\Http\Backoffice\Handlers\SendsEmails;
+use App\Http\Backoffice\Permission;
 use App\Http\Backoffice\Requests\Roles\RoleStoreRequest;
 use App\Http\Kernel;
 use App\Http\Util\RouteDefiner;
-use App\Http\Backoffice\Permission;
 use Digbang\Backoffice\Exceptions\ValidationException;
 use Digbang\Security\Activations\Activation;
 use Digbang\Security\Exceptions\SecurityException;
@@ -24,7 +24,7 @@ class UserStoreHandler extends Handler implements RouteDefiner
 
     public function __invoke(RoleStoreRequest $request)
     {
-        $input = $request->all(['firstName', 'lastName', 'email', 'password', 'activated', 'username', 'roles', 'permissions',]);
+        $input = $request->all(['firstName', 'lastName', 'email', 'password', 'activated', 'username', 'roles', 'permissions']);
 
         try {
             /** @var User $user */
@@ -76,7 +76,7 @@ class UserStoreHandler extends Handler implements RouteDefiner
 
     private function addRoles(User $user, array $roles)
     {
-        if ($user instanceof Roleable && !empty($roles)) {
+        if ($user instanceof Roleable && ! empty($roles)) {
             /* @var Roleable $user */
             foreach ($roles as $role) {
                 /** @var Role $role */

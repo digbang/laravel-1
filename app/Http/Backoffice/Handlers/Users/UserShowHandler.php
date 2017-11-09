@@ -4,9 +4,9 @@ namespace App\Http\Backoffice\Handlers\Users;
 
 use App\Http\Backoffice\Handlers\Dashboard\DashboardIndexHandler;
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Kernel;
 use App\Http\Util\RouteDefiner;
-use App\Http\Backoffice\Permission;
 use Digbang\Backoffice\Support\PermissionParser;
 use Digbang\Security\Exceptions\SecurityException;
 use Digbang\Security\Roles\Role;
@@ -30,7 +30,7 @@ class UserShowHandler extends Handler implements RouteDefiner
         /** @var User $user */
         $user = security()->users()->findById($userId);
 
-        if(!$user) {
+        if (! $user) {
             abort(404);
         }
 
@@ -38,20 +38,20 @@ class UserShowHandler extends Handler implements RouteDefiner
             trans('backoffice::default.home') => DashboardIndexHandler::class,
             trans('backoffice::auth.users') => UserListHandler::class,
             trans('backoffice::auth.user_name', [
-                'name'     => $user->getName()->getFirstName(),
+                'name' => $user->getName()->getFirstName(),
                 'lastname' => $user->getName()->getLastName(),
             ]),
         ]);
 
         $data = [
-            trans('backoffice::auth.first_name')   => $user->getName()->getFirstName(),
-            trans('backoffice::auth.last_name')    => $user->getName()->getLastName(),
-            trans('backoffice::auth.email')        => $user->getEmail(),
-            trans('backoffice::auth.username')     => $user->getUsername(),
-            trans('backoffice::auth.permissions')  => $this->permissionParser->toViewTable(security()->permissions()->all(), $user),
-            trans('backoffice::auth.activated')    => trans('backoffice::default.' . ($user->isActivated() ? 'yes' : 'no')),
+            trans('backoffice::auth.first_name') => $user->getName()->getFirstName(),
+            trans('backoffice::auth.last_name') => $user->getName()->getLastName(),
+            trans('backoffice::auth.email') => $user->getEmail(),
+            trans('backoffice::auth.username') => $user->getUsername(),
+            trans('backoffice::auth.permissions') => $this->permissionParser->toViewTable(security()->permissions()->all(), $user),
+            trans('backoffice::auth.activated') => trans('backoffice::default.' . ($user->isActivated() ? 'yes' : 'no')),
             trans('backoffice::auth.activated_at') => $user->isActivated() ? $user->getActivatedAt()->format(trans('backoffice::default.datetime_format')) : '-',
-            trans('backoffice::auth.last_login')   => $user->getLastLogin() ? $user->getLastLogin()->format(trans('backoffice::default.datetime_format')) : '-',
+            trans('backoffice::auth.last_login') => $user->getLastLogin() ? $user->getLastLogin()->format(trans('backoffice::default.datetime_format')) : '-',
         ];
 
         if ($user instanceof Roleable) {
@@ -95,14 +95,14 @@ class UserShowHandler extends Handler implements RouteDefiner
         }
 
         return view()->make('backoffice::show', [
-            'title'      => trans('backoffice::auth.users'),
+            'title' => trans('backoffice::auth.users'),
             'breadcrumb' => $breadcrumb,
-            'label'      => trans('backoffice::auth.user_name', [
-                'name'     => $user->getName()->getFirstName(),
+            'label' => trans('backoffice::auth.user_name', [
+                'name' => $user->getName()->getFirstName(),
                 'lastname' => $user->getName()->getLastName(),
             ]),
-            'data'       => $data,
-            'actions'    => $actions,
+            'data' => $data,
+            'actions' => $actions,
             'topActions' => $topActions,
         ]);
     }

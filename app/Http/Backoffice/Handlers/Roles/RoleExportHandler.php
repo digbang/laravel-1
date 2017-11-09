@@ -3,12 +3,12 @@
 namespace App\Http\Backoffice\Handlers\Roles;
 
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Kernel;
 use App\Http\Util\PaginationRequest;
 use App\Http\Util\RouteDefiner;
 use App\Infrastructure\Util\DataExporter;
 use App\Infrastructure\Util\PaginationData;
-use App\Http\Backoffice\Permission;
 use Digbang\Security\Roles\Role;
 use Digbang\Security\Users\User;
 use Illuminate\Http\Request;
@@ -26,14 +26,14 @@ class RoleExportHandler extends Handler implements RouteDefiner
             $users = [];
 
             /** @var User $user */
-            foreach($role->getUsers() as $user) {
+            foreach ($role->getUsers() as $user) {
                 $users[] = $user->getName();
             }
 
             return [
                 'Id' => $role->getRoleId(),
                 trans('backoffice::auth.name') => $role->getName(),
-                trans('backoffice::auth.users') => implode(', ', $users)
+                trans('backoffice::auth.users') => implode(', ', $users),
             ];
         })->toArray();
 
@@ -100,13 +100,13 @@ class RoleExportHandler extends Handler implements RouteDefiner
     private function convertSorting(PaginationData $paginationData): array
     {
         $sortings = [
-            'name' => 'r.name'
+            'name' => 'r.name',
         ];
 
         $selectedSorts = $paginationData->getSorting();
 
         $orderBy = [];
-        foreach($selectedSorts as $key => $sense) {
+        foreach ($selectedSorts as $key => $sense) {
             $key = $sortings[$key];
             $orderBy[$key] = $sense;
         }

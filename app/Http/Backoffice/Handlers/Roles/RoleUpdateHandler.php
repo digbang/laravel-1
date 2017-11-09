@@ -4,10 +4,10 @@ namespace App\Http\Backoffice\Handlers\Roles;
 
 use App\Http\Backoffice\Handlers\Dashboard\DashboardIndexHandler;
 use App\Http\Backoffice\Handlers\Handler;
+use App\Http\Backoffice\Permission;
 use App\Http\Backoffice\Requests\Auth\RoleUpdateRequest;
 use App\Http\Kernel;
 use App\Http\Util\RouteDefiner;
-use App\Http\Backoffice\Permission;
 use Digbang\Backoffice\Exceptions\ValidationException;
 use Digbang\Security\Exceptions\SecurityException;
 use Digbang\Security\Permissions\Permissible;
@@ -23,7 +23,7 @@ class RoleUpdateHandler extends Handler implements RouteDefiner
         /** @var Role $role */
         $role = security()->roles()->findById($roleId);
 
-        if(!$role) {
+        if (! $role) {
             abort(404);
         }
 
