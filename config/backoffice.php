@@ -2,6 +2,7 @@
 
 return [
     'global_url_prefix' => 'backoffice',
+    'favicon_url' => null,
     'auth' => [
         'login-route' => \App\Http\Backoffice\Handlers\Auth\AuthLoginHandler::ROUTE_NAME,
         'contact' => 'backoffice@digbang.com',
