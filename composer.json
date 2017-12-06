@@ -38,6 +38,7 @@
         "dingo/api": "API development.",
         "omnipay/omnipay": "Payment gateway abstraction.",
         "moneyphp/money": "Work with money safer, easier, and fun!",
+        "digbang/money": "Money PHP bridge for Laravel",
         "beberlei/assert": "^2.6"
     },
     "autoload": {
