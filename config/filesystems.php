@@ -60,5 +60,15 @@ return [
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
         ],
+
+        'minio' => [
+            'driver' => 's3',
+            'use_path_style_endpoint' => true,
+            'endpoint' => env('MINIO_ENDPOINT'),
+            'key' => env('AWS_KEY'),
+            'secret' => env('AWS_SECRET'),
+            'region' => env('AWS_REGION'),
+            'bucket' => env('AWS_BUCKET'),
+        ],
     ],
 ];
