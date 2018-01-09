@@ -17,6 +17,7 @@
         "digbang/doctrine-extensions": "^1.0",
         "digbang/backoffice": "^6.1",
         "digbang/utils": "^1.1",
+        "digbang/files": "^1.0",
         "laravelcollective/html": "^5.5",
         "cakephp/chronos": "^1.1"
     },
