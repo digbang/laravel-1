@@ -165,6 +165,8 @@ return [
         LaravelDoctrine\Extensions\BeberleiExtensionsServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Digbang\Backoffice\BackofficeServiceProvider::class,
+        Digbang\Utils\UtilsServiceProvider::class,
+        Digbang\Files\FilesServiceProvider::class,
 
         /*
          * Application Service Providers...
