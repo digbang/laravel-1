@@ -3,7 +3,11 @@
 namespace App\Providers;
 
 use App\Infrastructure\Doctrine\Repositories as Doctrine;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\RavenHandler;
+use Monolog\Logger;
 use ProjectName\Repositories;
 
 class AppServiceProvider extends ServiceProvider
@@ -40,6 +44,19 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class);
             $this->app->register(\PrettyRoutes\ServiceProvider::class);
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+        }
+
+        $this->configureMonologSentryHandler();
+    }
+
+    private function configureMonologSentryHandler()
+    {
+        if (config('sentry.enabled') && config('sentry.logging.enabled') && app()->bound('sentry')) {
+            $handler = new RavenHandler(app('sentry'), config('app.log_level'));
+            $handler->setFormatter(new LineFormatter("%message% %context% %extra%\n"));
+
+            $monolog = Log::getMonolog();
+            $monolog->pushHandler($handler);
         }
     }
 }
