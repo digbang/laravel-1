@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RavenHandler;
-use Monolog\Logger;
 use ProjectName\Repositories;
 
 class AppServiceProvider extends ServiceProvider
