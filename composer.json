@@ -19,7 +19,9 @@
         "digbang/utils": "^1.1",
         "digbang/files": "^1.0",
         "laravelcollective/html": "^5.5",
-        "cakephp/chronos": "^1.1"
+        "cakephp/chronos": "^1.1",
+        "sentry/sentry": "^1.6",
+        "sentry/sentry-laravel": "^0.7.0"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.4",
@@ -68,7 +70,7 @@
     },
     "scripts": {
         "post-root-package-install": [
-            "bash -c 'sed -i \"s/project-name/${PWD##*/}/g\" .env.example docker-compose.yml sonar-project.properties docker/postgres/Dockerfile'",
+            "bash -c 'sed -i \"s/project-name/${PWD##*/}/g\" .env.example docker-compose.yml sonar-project.properties docker/postgres/Dockerfile readme.md'",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
