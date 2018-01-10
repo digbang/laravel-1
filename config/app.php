@@ -152,7 +152,6 @@ return [
         LaravelDoctrine\Extensions\BeberleiExtensionsServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Digbang\Backoffice\BackofficeServiceProvider::class,
-        Digbang\Utils\UtilsServiceProvider::class,
         Digbang\Files\FilesServiceProvider::class,
 
         /*
@@ -221,10 +220,11 @@ return [
          */
         'Form' => Collective\Html\FormFacade::class,
         'HTML' => Collective\Html\HtmlFacade::class,
+        'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
 
         /*
          * Application Facades...
          */
-        'DatabaseSeeder' => App\Infrastructure\Seeders\DatabaseSeeder::class,
+        'DatabaseSeeder' => App\Development\Seeders\DatabaseSeeder::class,
     ],
 ];
