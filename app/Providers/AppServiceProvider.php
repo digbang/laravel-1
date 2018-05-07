@@ -16,11 +16,20 @@ class AppServiceProvider extends ServiceProvider
      *
      * @var string[]
      */
-    private $bindings = [
+    private $classBindings = [
         //Generic Repositories
         Repositories\PersistRepository::class => Doctrine\DoctrinePersistRepository::class,
 
         //Read Repositories
+
+
+        /* Example for environment specific implementations
+        ExampleRepo::class => [
+            'production' => ProductionExampleRepo::class,
+            'qa' => QAExampleRepo::class,
+            'default' => DefaultExampleRepo::class,
+        ],
+        */
     ];
 
     /**
@@ -35,7 +44,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        foreach ($this->bindings as $abstract => $concrete) {
+        foreach ($this->classBindings as $abstract => $concrete) {
+            if (is_array($concrete)) {
+                $concrete = $concrete[$this->app->environment()] ?? $concrete['default'];
+            }
+
             $this->app->bind($abstract, $concrete);
         }
 
@@ -51,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
     private function configureMonologSentryHandler()
     {
         if (config('sentry.enabled') && config('sentry.logging.enabled') && app()->bound('sentry')) {
-            $handler = new RavenHandler(app('sentry'), config('app.log_level'));
+            $handler = new RavenHandler(app('sentry'), config('logging.log_level'));
             $handler->setFormatter(new LineFormatter("%message% %context% %extra%\n"));
 
             $monolog = Log::getMonolog();
