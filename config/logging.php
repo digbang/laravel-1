@@ -3,7 +3,6 @@
 use Monolog\Handler\StreamHandler;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Log Channel
@@ -79,5 +78,4 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
     ],
-
 ];
