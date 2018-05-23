@@ -14,7 +14,7 @@
     "laravel-doctrine/extensions": "^1.0",
     "gedmo/doctrine-extensions": "^2.4",
     "beberlei/DoctrineExtensions": "^1.0",
-    "digbang/doctrine-extensions": "^1.0",
+    "digbang/doctrine-extensions": "^2.0",
     "digbang/backoffice": "^6.1",
     "digbang/files": "^1.0",
     "digbang/utils": "^1.1",
