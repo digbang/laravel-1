@@ -55,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class);
             $this->app->register(\PrettyRoutes\ServiceProvider::class);
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+            $this->app->register(TelescopeServiceProvider::class);
         }
 
         $this->configureMonologSentryHandler();
