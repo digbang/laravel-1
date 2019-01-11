@@ -20,7 +20,7 @@
     "laravel/framework": "5.7.*",
     "laravel/telescope": "^1.0",
     "laravel/tinker": "^1.0",
-    "laravelcollective/html": "^5.5",
+    "laravelcollective/html": "^5.7",
     "sentry/sentry": "^1.6",
     "sentry/sentry-laravel": "^0.10"
   },
