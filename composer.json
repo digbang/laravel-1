@@ -5,8 +5,8 @@
   "license": "proprietary",
   "type": "project",
   "require": {
-    "php": ">=7.2",
-    "beberlei/DoctrineExtensions": "^1.0",
+    "php": ">=7.3",
+    "beberlei/doctrineextensions": "^1.0",
     "cakephp/chronos": "^1.1",
     "digbang/backoffice": "^6.2",
     "digbang/doctrine-extensions": "^2.0",
