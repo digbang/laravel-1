@@ -33,7 +33,7 @@ class ExceptionHandler extends Handler
      */
     public function report(Exception $exception)
     {
-        if (env('SENTRY_ENABLED') && app()->bound('sentry') && $this->shouldReport($exception)) {
+        if (config('logging.sentry_enabled') && app()->bound('sentry') && $this->shouldReport($exception)) {
             app('sentry')->captureException($exception);
         }
 
