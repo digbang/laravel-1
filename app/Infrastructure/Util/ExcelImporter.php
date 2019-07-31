@@ -3,43 +3,24 @@
 namespace App\Infrastructure\Util;
 
 use Illuminate\Http\UploadedFile;
-use Maatwebsite\Excel\Collections\RowCollection;
-use Maatwebsite\Excel\Collections\SheetCollection;
 use Maatwebsite\Excel\Excel;
-use Maatwebsite\Excel\Readers\LaravelExcelReader;
 
 class ExcelImporter extends DataImporter
 {
     /** @var Excel */
     protected $excel;
 
-    /** @var LaravelExcelReader */
-    protected $reader;
-
     public function __construct(Excel $excel)
     {
         $this->excel = $excel;
     }
 
-    /** {@inheritdoc} */
-    public function fromUploadedFile(UploadedFile $uploadedFile): DataImporter
+    public function fromUploadedFile(UploadedFile $uploadedFile, ImportInterpreter $interpreter): array
     {
-        $this->reader = $this->excel->load($uploadedFile);
+        $worksheet = $this->excel->toArray($this->convertToArray(), $uploadedFile, null, Excel::XLS);
 
-        return $this;
-    }
-
-    /** {@inheritdoc} */
-    public function next(int $count)
-    {
-        /** @var SheetCollection|RowCollection $rows */
-        $rows = $this->reader->takeRows($this->cursor)->all();
-        $this->reader->skipRows($this->cursor += $count);
-
-        if ($rows->count() === 0) {
-            $this->isEndOfFile = true;
-        }
-
-        return $rows->all();
+        return array_map(function ($row) use ($interpreter) {
+            return $interpreter->transform($row);
+        }, current($worksheet));
     }
 }

@@ -3,39 +3,20 @@
 namespace App\Infrastructure\Util;
 
 use Illuminate\Http\UploadedFile;
-use Maatwebsite\Excel\Collections\RowCollection;
+use Maatwebsite\Excel\Concerns\ToArray;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 abstract class DataImporter
 {
-    /** @var int */
-    protected $cursor = 0;
+    abstract public function fromUploadedFile(UploadedFile $uploadedFile, ImportInterpreter $interpreter): array;
 
-    /** @var bool */
-    protected $isEndOfFile = false;
-
-    /**
-     * @param UploadedFile $uploadedFile
-     *
-     * @return DataImporter
-     */
-    abstract public function fromUploadedFile(UploadedFile $uploadedFile): self;
-
-    public function rewind(): void
+    public function convertToArray(): ToArray
     {
-        $this->cursor = 0;
-        $this->isEndOfFile = false;
+        return new class implements ToArray, WithHeadingRow {
+            public function array(array $array)
+            {
+                return $array;
+            }
+        };
     }
-
-    /** @return bool */
-    public function isEoF(): bool
-    {
-        return $this->isEndOfFile;
-    }
-
-    /**
-     * @param int $count
-     *
-     * @return RowCollection|array
-     */
-    abstract public function next(int $count);
 }

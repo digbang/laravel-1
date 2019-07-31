@@ -2,15 +2,14 @@
 
 namespace App\Infrastructure\Util;
 
-use Maatwebsite\Excel\Classes\LaravelExcelWorksheet;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Excel;
-use Maatwebsite\Excel\Writers\CellWriter;
-use Maatwebsite\Excel\Writers\LaravelExcelWriter;
 
 class DataExporter
 {
-    const EXTENSION_XLS = 'xls';
-
     /** @var Excel */
     private $excel;
     /** @var string */
@@ -18,7 +17,7 @@ class DataExporter
     /** @var array */
     private $columnFormats = [];
     /** @var array */
-    private $cellWrappings = [];
+    private $headings = [];
 
     public function __construct(Excel $excel)
     {
@@ -37,11 +36,6 @@ class DataExporter
         return $this;
     }
 
-    /**
-     * @param array $columnFormats
-     *
-     * @return DataExporter
-     */
     public function setColumnFormats(array $columnFormats): self
     {
         $this->columnFormats = $columnFormats;
@@ -49,73 +43,57 @@ class DataExporter
         return $this;
     }
 
-    /**
-     * @param array $cellWrappings
-     *
-     * @return DataExporter
-     */
-    public function setCellWrappings(array $cellWrappings): self
+    public function xls(array $data, string $fileName)
     {
-        $this->cellWrappings = $cellWrappings;
+        return $this->excel->download($this->fromArray($data), $fileName, Excel::XLS);
+    }
+
+    public function setHeadings(array $headings): self
+    {
+        $this->headings = $headings;
 
         return $this;
     }
 
-    /**
-     * @param array $data
-     * @param string $fileName
-     */
-    public function xls(array $data, string $fileName)
+    private function fromArray(array $data)
     {
-        $this->excel($data, $fileName)->download(static::EXTENSION_XLS, [
-            'Content-Type' => 'application/vnd.ms-excel',
-        ]);
-    }
+        return new class($data, $this->headings, $this->columnFormats, $this->sheetName) implements FromArray, WithHeadings, WithColumnFormatting, WithTitle {
+            /** @var array */
+            private $data;
+            /** @var array */
+            private $headings;
+            /** @var array */
+            private $columnFormats;
+            /** @var string */
+            private $sheetName;
 
-    private function excel(
-        array $data,
-        string $fileName
-    ) {
-        // Create excel writer
-        return $this->excel->create($fileName, function (LaravelExcelWriter $excel) use ($data) {
-            $excel->sheet($this->sheetName, function (LaravelExcelWorksheet $sheet) use ($data) {
-                $sheet->setColumnFormat($this->columnFormats);
+            public function __construct(array $data, array $headings = [], array $columnFormats = [], string $sheetName = 'Worksheet')
+            {
+                $this->data = $data;
+                $this->headings = $headings;
+                $this->columnFormats = $columnFormats;
+                $this->sheetName = $sheetName;
+            }
 
-                $this->addCellWraps($sheet);
+            public function array(): array
+            {
+                return $this->data;
+            }
 
-                $sheet->fromArray($data);
+            public function columnFormats(): array
+            {
+                return $this->columnFormats;
+            }
 
-                // heading translations
-                $keys = empty($data) ? [] : array_keys(head($data));
-                $sheet->row(1, $this->columnTranslations($keys));
+            public function headings(): array
+            {
+                return $this->headings;
+            }
 
-                // heading style
-                $sheet->row(1, function (CellWriter $row) {
-                    $row->setFontWeight('bold');
-                });
-                $sheet->freezeFirstRow();
-            });
-        });
-    }
-
-    /**
-     * Translates given keys with lang files.
-     *
-     * @param  array $array_keys
-     *
-     * @return array
-     */
-    private function columnTranslations(array $array_keys)
-    {
-        return array_map(function ($key) {
-            return trans($key);
-        }, $array_keys);
-    }
-
-    private function addCellWraps(LaravelExcelWorksheet $sheet)
-    {
-        foreach ($this->cellWrappings as $cell => $wrap) {
-            $sheet->getStyle($cell)->getAlignment()->setWrapText($wrap);
-        }
+            public function title(): string
+            {
+                return $this->sheetName;
+            }
+        };
     }
 }
