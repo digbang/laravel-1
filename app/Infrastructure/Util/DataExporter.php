@@ -18,10 +18,13 @@ class DataExporter
     private $columnFormats = [];
     /** @var array */
     private $headings = [];
+    /** @var ExportTransformer */
+    private $exportTransformer;
 
-    public function __construct(Excel $excel)
+    public function __construct(Excel $excel, ExportTransformer $transformer)
     {
         $this->excel = $excel;
+        $this->exportTransformer = $transformer;
     }
 
     /**
@@ -43,9 +46,15 @@ class DataExporter
         return $this;
     }
 
-    public function xls(array $data, string $fileName)
+    public function xls(array $data, string $fileName, ExportTransformer $transformer = null)
     {
-        return $this->excel->download($this->fromArray($data), $fileName, Excel::XLS);
+        $this->exportTransformer = $transformer ?? $this->exportTransformer;
+
+        $transformedData = array_map(function ($object) {
+            return $this->exportTransformer->transform($object);
+        }, $data);
+
+        return $this->excel->download($this->fromArray($transformedData), $fileName, Excel::XLS);
     }
 
     public function setHeadings(array $headings): self

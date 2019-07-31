@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 abstract class DataImporter
 {
-    abstract public function fromUploadedFile(UploadedFile $uploadedFile, ImportInterpreter $interpreter): array;
+    abstract public function fromUploadedFile(UploadedFile $uploadedFile, ImportTransformer $transformer): array;
 
     public function convertToArray(): ToArray
     {
