@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Infrastructure\Doctrine\Repositories as Doctrine;
-use App\Infrastructure\Util;
 use Illuminate\Support\ServiceProvider;
 use ProjectName\Repositories;
 
@@ -19,9 +18,6 @@ class AppServiceProvider extends ServiceProvider
         Repositories\PersistRepository::class => Doctrine\DoctrinePersistRepository::class,
 
         //Read Repositories
-
-        Util\ImportTransformer::class => Util\DefaultImportTransformer::class,
-        Util\ExportTransformer::class => Util\DefaultExportTransformer::class,
 
         /* Example for environment specific implementations
         ExampleRepo::class => [

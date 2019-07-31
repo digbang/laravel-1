@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Util;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -18,13 +19,10 @@ class DataExporter
     private $columnFormats = [];
     /** @var array */
     private $headings = [];
-    /** @var ExportTransformer */
-    private $exportTransformer;
 
-    public function __construct(Excel $excel, ExportTransformer $transformer)
+    public function __construct(Excel $excel)
     {
         $this->excel = $excel;
-        $this->exportTransformer = $transformer;
     }
 
     /**
@@ -46,15 +44,14 @@ class DataExporter
         return $this;
     }
 
-    public function xls(array $data, string $fileName, ExportTransformer $transformer = null)
+    /**
+     * @param string $fileName
+     * @param Arrayable ...$data Please use `...` operator when call the method. Ex: $exporter->xls('file', ...$resultOfSearch)
+     * @return mixed
+     */
+    public function xls(string $fileName, Arrayable  ...$data)
     {
-        $this->exportTransformer = $transformer ?? $this->exportTransformer;
-
-        $transformedData = array_map(function ($object) {
-            return $this->exportTransformer->transform($object);
-        }, $data);
-
-        return $this->excel->download($this->fromArray($transformedData), $fileName, Excel::XLS);
+        return $this->excel->download($this->fromArray($data), $fileName, Excel::XLS);
     }
 
     public function setHeadings(array $headings): self
