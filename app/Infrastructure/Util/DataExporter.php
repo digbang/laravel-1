@@ -2,7 +2,6 @@
 
 namespace App\Infrastructure\Util;
 
-use Illuminate\Contracts\Support\Arrayable;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -44,14 +43,9 @@ class DataExporter
         return $this;
     }
 
-    /**
-     * @param string $fileName
-     * @param Arrayable ...$data Please use `...` operator when call the method. Ex: $exporter->xls('file', ...$resultOfSearch)
-     * @return mixed
-     */
-    public function xls(string $fileName, Arrayable  ...$data)
+    public function xls(ArrayableCollection $data, string $fileName)
     {
-        return $this->excel->download($this->fromArray($data), $fileName, Excel::XLS);
+        return $this->excel->download($this->fromArray($data->getItems()), $fileName, Excel::XLS);
     }
 
     public function setHeadings(array $headings): self
