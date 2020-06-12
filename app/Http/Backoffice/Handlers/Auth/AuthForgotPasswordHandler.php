@@ -20,7 +20,6 @@ class AuthForgotPasswordHandler extends Handler implements RouteDefiner
     protected const ROUTE_NAME = 'backoffice.auth.password.forgot-request';
 
     public function __invoke(
-        Redirector $redirector,
         ForgotPasswordRequest $request,
         SecurityApi $securityApi
     ): RedirectResponse {
@@ -29,7 +28,7 @@ class AuthForgotPasswordHandler extends Handler implements RouteDefiner
         /** @var User|null $user */
         $user = $securityApi->users()->findByCredentials(['email' => $email]);
         if (! $user) {
-            return $redirector->back()
+            return redirect()->back()
                 ->withErrors(['email' => trans('backoffice::auth.validation.user.not-found')]);
         }
 
@@ -41,7 +40,7 @@ class AuthForgotPasswordHandler extends Handler implements RouteDefiner
             AuthResetPasswordFormHandler::route($user->getUserId(), $reminder->getCode())
         );
 
-        return $redirector->to(AuthLoginHandler::route())
+        return redirect()->to(AuthLoginHandler::route())
             ->with('info', trans('backoffice::auth.reset-password.email-sent',
                 ['email' => $user->getEmail()]
             ));

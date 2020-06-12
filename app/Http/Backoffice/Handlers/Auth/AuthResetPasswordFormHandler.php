@@ -22,21 +22,19 @@ class AuthResetPasswordFormHandler extends Handler implements RouteDefiner
      */
     public function __invoke(
         ResetPasswordFormRequest $request,
-        SecurityApi $securityApi,
-        Redirector $redirector,
-        Factory $view
+        SecurityApi $securityApi
     ) {
         $user = $request->findUser();
         $code = $request->code();
 
         if ($securityApi->reminders()->exists($user, $code)) {
-            return $view->make('backoffice::auth.reset-password', [
+            return view()->make('backoffice::auth.reset-password', [
                 'id' => $user->getUserId(),
                 'resetCode' => $code,
             ]);
         }
 
-        return $redirector->to(AuthLoginHandler::route())
+        return redirect()->to(AuthLoginHandler::route())
             ->with('danger', trans('backoffice::auth.validation.reset-password.incorrect'));
     }
 

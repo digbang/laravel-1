@@ -21,8 +21,7 @@ class AuthResetPasswordHandler extends Handler implements RouteDefiner
 
     public function __invoke(
         ResetPasswordRequest $request,
-        SecurityApi $securityApi,
-        Redirector $redirector
+        SecurityApi $securityApi
     ): RedirectResponse {
         /** @var User $user */
         $user = $request->findUser();
@@ -35,12 +34,12 @@ class AuthResetPasswordHandler extends Handler implements RouteDefiner
 
             $securityApi->login($user);
 
-            return $redirector->to(DashboardHandler::route())->with(
+            return redirect()->to(DashboardHandler::route())->with(
                 'success', trans('backoffice::auth.reset-password.success', ['email' => $user->getEmail()])
             );
         }
 
-        return $redirector->to(AuthLoginHandler::route())
+        return redirect()->to(AuthLoginHandler::route())
             ->with('danger', trans('backoffice::auth.validation.reset-password.incorrect'));
     }
 

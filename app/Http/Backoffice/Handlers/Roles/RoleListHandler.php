@@ -32,7 +32,7 @@ class RoleListHandler extends Handler implements RouteDefiner
         $this->permissionParser = $permissionParser;
     }
 
-    public function __invoke(RoleCriteriaRequest $request, Factory $view): View
+    public function __invoke(RoleCriteriaRequest $request): View
     {
         $list = $this->getListing();
 
@@ -46,7 +46,7 @@ class RoleListHandler extends Handler implements RouteDefiner
             trans('backoffice::auth.roles'),
         ]);
 
-        return $view->make('backoffice::index', [
+        return view()->make('backoffice::index', [
             'title' => trans('backoffice::auth.roles'),
             'list' => $list,
             'breadcrumb' => $breadcrumb,
@@ -179,17 +179,14 @@ class RoleListHandler extends Handler implements RouteDefiner
             'title' => trans('backoffice::default.edit'),
         ]);
 
-        /** @var string $target */
-        $target = function (Collection $row) {
-            try {
-                return security()->url()->to(RoleDeleteHandler::route($row->get('id')));
-            } catch (SecurityException $e) {
-                return false;
-            }
-        };
-
         $rowActions->form(
-            $target,
+            function (Collection $row) {
+                try {
+                    return security()->url()->to(RoleDeleteHandler::route($row->get('id')));
+                } catch (SecurityException $e) {
+                    return false;
+                }
+            },
             fa('times'),
             Request::METHOD_DELETE,
             [

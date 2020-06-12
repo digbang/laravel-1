@@ -30,7 +30,7 @@ class UserEditFormHandler extends Handler implements RouteDefiner
         $this->permissionParser = $permissionParser;
     }
 
-    public function __invoke(UserRequest $request, Factory $view): View
+    public function __invoke(UserRequest $request): View
     {
         /** @var User $user */
         $user = $request->findUser();
@@ -81,7 +81,7 @@ class UserEditFormHandler extends Handler implements RouteDefiner
             trans('backoffice::default.edit'),
         ]);
 
-        return $view->make('backoffice::edit', [
+        return view()->make('backoffice::edit', [
             'title' => trans('backoffice::auth.users'),
             'form' => $form,
             'breadcrumb' => $breadcrumb,

@@ -25,7 +25,7 @@ class RoleEditFormHandler extends Handler implements RouteDefiner
         $this->permissionParser = $permissionParser;
     }
 
-    public function __invoke(RoleRequest $request, Factory $view): View
+    public function __invoke(RoleRequest $request): View
     {
         $role = $request->getRole();
 
@@ -52,7 +52,7 @@ class RoleEditFormHandler extends Handler implements RouteDefiner
             trans('backoffice::default.edit'),
         ]);
 
-        return $view->make('backoffice::edit', [
+        return view()->make('backoffice::edit', [
             'title' => trans('backoffice::auth.roles'),
             'form' => $form,
             'breadcrumb' => $breadcrumb,

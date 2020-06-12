@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "40972713187bcfef1747f32afcd75d6a",
+    "content-hash": "62e5e54eb7eb07963d5a6082ee00f38a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -626,16 +626,16 @@
         },
         {
             "name": "digbang/backoffice",
-            "version": "v7.0.2",
+            "version": "v7.0.3",
             "source": {
                 "type": "git",
                 "url": "git@github.com:digbang/backoffice.git",
-                "reference": "010b84834c6ebc3a6028e2ac39a71c115ef721a6"
+                "reference": "65ec87fc7f7abeb1decbae9e79ccfb7a9d897028"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/digbang/backoffice/zipball/010b84834c6ebc3a6028e2ac39a71c115ef721a6",
-                "reference": "010b84834c6ebc3a6028e2ac39a71c115ef721a6",
+                "url": "https://api.github.com/repos/digbang/backoffice/zipball/65ec87fc7f7abeb1decbae9e79ccfb7a9d897028",
+                "reference": "65ec87fc7f7abeb1decbae9e79ccfb7a9d897028",
                 "shasum": ""
             },
             "require": {
@@ -683,9 +683,9 @@
             ],
             "description": "A set of libraries, helpers and templates for a backoffice (admin / panel) project.",
             "support": {
-                "source": "https://github.com/digbang/backoffice/tree/v7.0.2"
+                "source": "https://github.com/digbang/backoffice/tree/v7.0.3"
             },
-            "time": "2020-06-11T17:40:36+00:00"
+            "time": "2020-06-12T14:30:34+00:00"
         },
         {
             "name": "digbang/doctrine-extensions",

@@ -24,7 +24,7 @@ class RoleCreateFormHandler extends Handler implements RouteDefiner
         $this->permissionParser = $permissionParser;
     }
 
-    public function __invoke(Factory $view): View
+    public function __invoke(): View
     {
         $label = trans('backoffice::default.new', ['model' => trans('backoffice::auth.role')]);
 
@@ -41,7 +41,7 @@ class RoleCreateFormHandler extends Handler implements RouteDefiner
             $label,
         ]);
 
-        return $view->make('backoffice::create', [
+        return view()->make('backoffice::create', [
             'title' => trans('backoffice::auth.roles'),
             'form' => $form,
             'breadcrumb' => $breadcrumb,

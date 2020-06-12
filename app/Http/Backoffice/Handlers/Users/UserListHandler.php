@@ -171,18 +171,14 @@ class UserListHandler extends Handler implements RouteDefiner
                 'title' => trans('backoffice::default.edit'),
             ]
         );
-
-        /** @var callable|string $target */
-        $target = function (Collection $row) {
-            try {
-                return url()->to(UserDeleteHandler::route($row->get('id')));
-            } catch (SecurityException $e) {
-                return false;
-            }
-        };
-
         $rowActions->form(
-            $target,
+            function (Collection $row) {
+                try {
+                    return url()->to(UserDeleteHandler::route($row->get('id')));
+                } catch (SecurityException $e) {
+                    return false;
+                }
+            },
             fa('times'),
             Request::METHOD_DELETE,
             [
@@ -194,17 +190,14 @@ class UserListHandler extends Handler implements RouteDefiner
             ]
         );
 
-        /** @var callable|string $target */
-        $target = function (Collection $row) {
-            try {
-                return url()->to(UserResetPasswordHandler::route($row->get('id')));
-            } catch (SecurityException $e) {
-                return false;
-            }
-        };
-
         $rowActions->form(
-            $target,
+            function (Collection $row) {
+                try {
+                    return url()->to(UserResetPasswordHandler::route($row->get('id')));
+                } catch (SecurityException $e) {
+                    return false;
+                }
+            },
             fa('unlock-alt'),
             Request::METHOD_POST,
             [
@@ -216,21 +209,18 @@ class UserListHandler extends Handler implements RouteDefiner
             ]
         );
 
-        /** @var callable|string $target */
-        $target = function (Collection $row) {
-            if ($row['activated']) {
-                return false;
-            }
-
-            try {
-                return url()->to(UserResendActivationHandler::route($row->get('id')));
-            } catch (SecurityException $e) {
-                return false;
-            }
-        };
-
         $rowActions->form(
-            $target,
+            function (Collection $row) {
+                if ($row['activated']) {
+                    return false;
+                }
+
+                try {
+                    return url()->to(UserResendActivationHandler::route($row->get('id')));
+                } catch (SecurityException $e) {
+                    return false;
+                }
+            },
             fa('reply-all'),
             Request::METHOD_POST,
             [

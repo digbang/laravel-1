@@ -23,9 +23,7 @@ class AuthAuthenticateHandler extends Handler implements RouteDefiner
      */
     public function __invoke(
         LoginRequest $request,
-        SecurityApi $securityApi,
-        Redirector $redirector,
-        Factory $view
+        SecurityApi $securityApi
     ) {
         $errors = new MessageBag();
 
@@ -37,20 +35,20 @@ class AuthAuthenticateHandler extends Handler implements RouteDefiner
                 $request->input('remember') ?? false);
 
             if ($authenticated) {
-                return $redirector->intended(
+                return redirect()->intended(
                     $securityApi->url()->to(DashboardHandler::route())
                 );
             }
 
             $errors->add('password', trans('backoffice::auth.validation.password.wrong'));
 
-            return $redirector->to(AuthLoginHandler::route())->withInput()->withErrors($errors);
+            return redirect()->to(AuthLoginHandler::route())->withInput()->withErrors($errors);
         } catch (ThrottlingException $e) {
-            return $view->make('backoffice::auth.throttling', [
+            return view()->make('backoffice::auth.throttling', [
                 'message' => trans('backoffice::auth.throttling.' . $e->getType(), ['remaining' => (new Chronos())->diffInSeconds(Chronos::createFromTimestamp($e->getFree()->timestamp))]),
             ]);
         } catch (NotActivatedException $e) {
-            return $view->make('backoffice::auth.not-activated');
+            return view()->make('backoffice::auth.not-activated');
         }
     }
 

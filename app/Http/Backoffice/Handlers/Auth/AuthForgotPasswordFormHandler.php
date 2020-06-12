@@ -13,9 +13,9 @@ class AuthForgotPasswordFormHandler extends Handler implements RouteDefiner
 {
     protected const ROUTE_NAME = 'backoffice.auth.password.forgot';
 
-    public function __invoke(Factory $view): View
+    public function __invoke(): View
     {
-        return $view->make('backoffice::auth.request-reset-password');
+        return view()->make('backoffice::auth.request-reset-password');
     }
 
     public static function defineRoute(Router $router): void

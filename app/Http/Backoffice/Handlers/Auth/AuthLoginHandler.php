@@ -13,9 +13,9 @@ class AuthLoginHandler extends Handler implements RouteDefiner
 {
     public const ROUTE_NAME = 'backoffice.auth.login';
 
-    public function __invoke(Factory $view): View
+    public function __invoke(): View
     {
-        return $view->make('backoffice::auth.login');
+        return view()->make('backoffice::auth.login');
     }
 
     public static function defineRoute(Router $router): void
