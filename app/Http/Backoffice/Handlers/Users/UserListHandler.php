@@ -246,7 +246,6 @@ class UserListHandler extends Handler implements RouteDefiner
     }
 
     /**
-     * @param CriteriaRequest $request
      * @return \Illuminate\Pagination\LengthAwarePaginator|int|mixed|string
      */
     private function getData(CriteriaRequest $request)

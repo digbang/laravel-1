@@ -13,6 +13,7 @@ use Digbang\Security\Exceptions\SecurityException;
 use Digbang\Security\Roles\Role;
 use Digbang\Security\Roles\Roleable;
 use Digbang\Security\Users\DefaultUser;
+use Digbang\Security\Users\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Routing\Router;
@@ -28,7 +29,7 @@ class UserShowHandler extends Handler implements RouteDefiner
 
     public function __invoke(UserRequest $request, Factory $view): View
     {
-        /** @var DefaultUser $user */
+        /** @var User $user */
         $user = $request->findUser();
 
         $breadcrumb = backoffice()->breadcrumb([

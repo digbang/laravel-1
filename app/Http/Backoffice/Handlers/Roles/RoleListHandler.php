@@ -179,8 +179,8 @@ class RoleListHandler extends Handler implements RouteDefiner
             'title' => trans('backoffice::default.edit'),
         ]);
 
-        /** @var string $closure */
-        $closure = function (Collection $row) {
+        /** @var string $target */
+        $target = function (Collection $row) {
             try {
                 return security()->url()->to(RoleDeleteHandler::route($row->get('id')));
             } catch (SecurityException $e) {
@@ -189,7 +189,7 @@ class RoleListHandler extends Handler implements RouteDefiner
         };
 
         $rowActions->form(
-            $closure,
+            $target,
             fa('times'),
             Request::METHOD_DELETE,
             [
