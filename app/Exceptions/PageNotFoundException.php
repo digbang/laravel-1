@@ -2,12 +2,22 @@
 
 namespace App\Exceptions;
 
-use Flugg\Responder\Exceptions\Http\PageNotFoundException as PageNotFoundExceptionBase;
+use Flugg\Responder\Exceptions\Http\HttpException;
+use Illuminate\Http\Response;
 
-class PageNotFoundException extends PageNotFoundExceptionBase
+class PageNotFoundException extends HttpException
 {
-    public function __construct()
-    {
-        parent::__construct(trans('errors.unauthenticated'));
-    }
+    /**
+     * An HTTP status code.
+     *
+     * @var int
+     */
+    protected $status = Response::HTTP_NOT_FOUND;
+
+    /**
+     * An error code.
+     *
+     * @var string|null
+     */
+    protected $errorCode = 'PAGE_NOT_FOUND';
 }
