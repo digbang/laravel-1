@@ -8,8 +8,6 @@ use App\Http\Kernel;
 use App\Http\Utils\RouteDefiner;
 use Digbang\Security\Contracts\SecurityApi;
 use Illuminate\Config\Repository;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Routing\Redirector;
 use Illuminate\Routing\Router;
 
 class AuthActivateHandler extends Handler implements RouteDefiner

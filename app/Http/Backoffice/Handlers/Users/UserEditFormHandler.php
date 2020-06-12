@@ -16,7 +16,6 @@ use Digbang\Security\Roles\Role;
 use Digbang\Security\Roles\Roleable;
 use Digbang\Security\Users\User;
 use Doctrine\Common\Collections\ArrayCollection;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;

@@ -11,8 +11,6 @@ use Cake\Chronos\Chronos;
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
 use Digbang\Security\Contracts\SecurityApi;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Routing\Redirector;
 use Illuminate\Routing\Router;
 use Illuminate\Support\MessageBag;
 

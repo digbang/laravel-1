@@ -7,7 +7,6 @@ use App\Http\Kernel;
 use App\Http\Utils\RouteDefiner;
 use Digbang\Security\Contracts\SecurityApi;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
 use Illuminate\Routing\Router;
 
 class AuthLogoutHandler extends Handler implements RouteDefiner

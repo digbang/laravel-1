@@ -10,7 +10,6 @@ use App\Http\Utils\RouteDefiner;
 use Digbang\Security\Contracts\SecurityApi;
 use Digbang\Security\Users\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
 use Illuminate\Routing\Router;
 
 class AuthForgotPasswordHandler extends Handler implements RouteDefiner

@@ -7,8 +7,6 @@ use App\Http\Backoffice\Requests\Auth\ResetPasswordFormRequest;
 use App\Http\Kernel;
 use App\Http\Utils\RouteDefiner;
 use Digbang\Security\Contracts\SecurityApi;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Routing\Redirector;
 use Illuminate\Routing\Router;
 
 class AuthResetPasswordFormHandler extends Handler implements RouteDefiner

@@ -11,7 +11,6 @@ use Digbang\Security\Activations\Activation;
 use Digbang\Security\Contracts\SecurityApi;
 use Digbang\Security\Users\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
 use Illuminate\Routing\Router;
 
 class AuthResendActivationHandler extends Handler implements RouteDefiner
