@@ -26,7 +26,7 @@ class AuthForgotPasswordHandler extends Handler implements RouteDefiner
     ): RedirectResponse {
         $email = $request->getEmail();
 
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $securityApi->users()->findByCredentials(['email' => $email]);
         if (! $user) {
             return $redirector->back()

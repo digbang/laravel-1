@@ -155,3 +155,12 @@ public function roles(): ?array
     return null;
 }
 ```
+
+## Php Stan
+
+https://phpstan.org/user-guide/getting-started
+
+## Php Insight
+
+https://phpinsights.com/get-started.html
+

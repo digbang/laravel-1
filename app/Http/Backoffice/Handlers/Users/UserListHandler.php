@@ -14,7 +14,6 @@ use Digbang\Security\Exceptions\SecurityException;
 use Digbang\Security\Users\User;
 use Digbang\Utils\CriteriaRequest;
 use Digbang\Utils\Sorting;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
@@ -24,7 +23,7 @@ use ProjectName\Repositories\Criteria\Users\UserSorting;
 
 class UserListHandler extends Handler implements RouteDefiner
 {
-    public function __invoke(UserCriteriaRequest $request, Factory $view): View
+    public function __invoke(UserCriteriaRequest $request): View
     {
         $list = $this->getListing();
 
@@ -38,7 +37,7 @@ class UserListHandler extends Handler implements RouteDefiner
             trans('backoffice::auth.users'),
         ]);
 
-        return $view->make('backoffice::index', [
+        return view()->make('backoffice::index', [
             'title' => trans('backoffice::auth.users'),
             'list' => $list,
             'breadcrumb' => $breadcrumb,
@@ -173,14 +172,17 @@ class UserListHandler extends Handler implements RouteDefiner
             ]
         );
 
+        /** @var callable|string $target */
+        $target = function (Collection $row) {
+            try {
+                return url()->to(UserDeleteHandler::route($row->get('id')));
+            } catch (SecurityException $e) {
+                return false;
+            }
+        };
+
         $rowActions->form(
-            function (Collection $row) {
-                try {
-                    return url()->to(UserDeleteHandler::route($row->get('id')));
-                } catch (SecurityException $e) {
-                    return false;
-                }
-            },
+            $target,
             fa('times'),
             Request::METHOD_DELETE,
             [
@@ -192,14 +194,17 @@ class UserListHandler extends Handler implements RouteDefiner
             ]
         );
 
+        /** @var callable|string $target */
+        $target = function (Collection $row) {
+            try {
+                return url()->to(UserResetPasswordHandler::route($row->get('id')));
+            } catch (SecurityException $e) {
+                return false;
+            }
+        };
+
         $rowActions->form(
-            function (Collection $row) {
-                try {
-                    return url()->to(UserResetPasswordHandler::route($row->get('id')));
-                } catch (SecurityException $e) {
-                    return false;
-                }
-            },
+            $target,
             fa('unlock-alt'),
             Request::METHOD_POST,
             [
@@ -211,18 +216,21 @@ class UserListHandler extends Handler implements RouteDefiner
             ]
         );
 
-        $rowActions->form(
-            function (Collection $row) {
-                if ($row['activated']) {
-                    return false;
-                }
+        /** @var callable|string $target */
+        $target = function (Collection $row) {
+            if ($row['activated']) {
+                return false;
+            }
 
-                try {
-                    return url()->to(UserResendActivationHandler::route($row->get('id')));
-                } catch (SecurityException $e) {
-                    return false;
-                }
-            },
+            try {
+                return url()->to(UserResendActivationHandler::route($row->get('id')));
+            } catch (SecurityException $e) {
+                return false;
+            }
+        };
+
+        $rowActions->form(
+            $target,
             fa('reply-all'),
             Request::METHOD_POST,
             [
@@ -237,9 +245,6 @@ class UserListHandler extends Handler implements RouteDefiner
         $list->setRowActions($rowActions);
     }
 
-    /**
-     * @return \Illuminate\Pagination\LengthAwarePaginator|int|mixed|string
-     */
     private function getData(CriteriaRequest $request)
     {
         /** @var DoctrineUserRepository $users */
