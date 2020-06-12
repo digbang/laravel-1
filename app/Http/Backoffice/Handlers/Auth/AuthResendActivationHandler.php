@@ -31,7 +31,7 @@ class AuthResendActivationHandler extends Handler implements RouteDefiner
         if (! $user) {
             redirect()->back()->withInput()->withErrors([
                 'email' => trans('backoffice::auth.validation.activation.incorrect', [
-                    'correo' => $email,
+                    'email' => $email,
                 ]),
             ]);
         }

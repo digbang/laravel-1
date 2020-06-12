@@ -626,16 +626,16 @@
         },
         {
             "name": "digbang/backoffice",
-            "version": "v7.0.3",
+            "version": "v7.0.4",
             "source": {
                 "type": "git",
                 "url": "git@github.com:digbang/backoffice.git",
-                "reference": "65ec87fc7f7abeb1decbae9e79ccfb7a9d897028"
+                "reference": "984d69a6f1c59582ceecf46d46f78e445b2edfbb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/digbang/backoffice/zipball/65ec87fc7f7abeb1decbae9e79ccfb7a9d897028",
-                "reference": "65ec87fc7f7abeb1decbae9e79ccfb7a9d897028",
+                "url": "https://api.github.com/repos/digbang/backoffice/zipball/984d69a6f1c59582ceecf46d46f78e445b2edfbb",
+                "reference": "984d69a6f1c59582ceecf46d46f78e445b2edfbb",
                 "shasum": ""
             },
             "require": {
@@ -683,9 +683,9 @@
             ],
             "description": "A set of libraries, helpers and templates for a backoffice (admin / panel) project.",
             "support": {
-                "source": "https://github.com/digbang/backoffice/tree/v7.0.3"
+                "source": "https://github.com/digbang/backoffice/tree/v7.0.4"
             },
-            "time": "2020-06-12T14:30:34+00:00"
+            "time": "2020-06-12T14:44:11+00:00"
         },
         {
             "name": "digbang/doctrine-extensions",
