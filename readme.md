@@ -273,6 +273,7 @@ https://github.com/tymondesigns/jwt-auth
     * Phar
     * posix
     * readline
+    * redis
     * Reflection
     * session
     * SimpleXML
