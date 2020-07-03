@@ -302,3 +302,13 @@ https://github.com/tymondesigns/jwt-auth
 * SO Packages:
     * locales
     * locales-all
+
+## Override extensions config
+In order to override any extension setting you should be able to put the corresponding ``.ini`` file inside ./docker/php/conf.d folder, that is relative to the application root folder.
+
+> Remember, by convention any extension config file should be named as ``docker-php-ext-`` followed by the extension name itself.
+
+For example, if you wish to override ``opcache`` you should create the following file:
+``./docker/php/conf.d/docker-php-ext-opcache.ini`` and fill it with everything you need.
+
+Same for ``xdebug``: ``./docker/php/conf.d/docker-php-ext-xdebug.ini``.
