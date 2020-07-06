@@ -303,8 +303,17 @@ https://github.com/tymondesigns/jwt-auth
     * locales
     * locales-all
 
-## Override extensions config
-In order to override any extension setting you should be able to put the corresponding ``.ini`` file inside ./docker/php/conf.d folder, that is relative to the application root folder.
+## Overriding php configuration
+
+### Overriding php ini default configurations
+In order to override .ini configurations, create a ``custom.ini`` file in `./docker/php/conf.d` directory on the root of the project.
+
+> It's recommended to change `upload_max_filesize`, `post_max_size`. Have in mind this values should be changed in all environments.
+
+> It's recommended to change `memory_limit`. In this case, only in dev environments.
+
+### Overriding extensions configuration
+In order to override any extension setting you should be able to put the corresponding ``.ini`` file inside `/docker/php/conf.d` directory on the root of the project.
 
 > Remember, by convention any extension config file should be named as ``docker-php-ext-`` followed by the extension name itself.
 
