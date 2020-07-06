@@ -313,7 +313,7 @@ In order to override .ini configurations, use the `custom.ini` file in `./docker
 > It's recommended to change `memory_limit` if you need it. In this case, only in dev environments.
 
 ### Overriding extensions configuration
-In order to override any extension setting you should be able to put the corresponding `.ini` file inside `/docker/php/conf.d` directory on the root of the project.
+In order to override any extension setting you should be able to put the corresponding `.ini` file inside `/docker/php/conf.d` directory on the root of the project, add it as a volume in the docker-compose.yml and restart your container.
 
 > Remember, by convention any extension config file should be named as `docker-php-ext-`` followed by the extension name itself.
 
